@@ -39,7 +39,8 @@
       "Create ui/common/ui_theme.tres with simple black/white/gray styling for Button, Label, LineEdit, ProgressBar, TabBar, ItemList, and set it as the project default theme (gui/theme/custom).",
       "Use only these placeholders for art in every later feature."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. PlaceholderBox is a Panel (not PanelContainer) so long labels cannot grow the box; set a size or custom_minimum_size when using it, because its minimum size is 0. Theme also styles Panel and PanelContainer, and the default clear color is now white, so black theme text stays readable. Import clean; default-state rendering checked with a screenshot. Hover, pressed and focus states not checked visually."
   },
   {
     "id": "core-autoloads-01",

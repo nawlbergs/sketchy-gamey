@@ -7,3 +7,16 @@
 - Verified 2026-10-31: user ran `godot_console --headless --path . --import` (Godot 4.7.2 stable) in their terminal; no errors or warnings. No scripts or scenes exist yet, so this only shows the project opens and scans cleanly.
 - Next suggested feature: ui-placeholder-01 or core-autoloads-01 (both only depend on setup-01).
 
+## 2026-10-31 - ui-placeholder-01 (Placeholder visuals + theme) - COMPLETE
+- ui/common/placeholder_box.tscn + .gd: class PlaceholderBox, white fill, 3px gray border, exported label_text drawn centered in gray. Label updates live and shows in the editor (@tool). Ignores the mouse, so it never swallows clicks or hover.
+- Root is a Panel, not a PanelContainer. Label autowrap + clip_text inside a PanelContainer drew no text at all; a Panel with clip_contents fixes it and long labels cannot grow the box.
+- Using it: minimum size is 0, so inside containers set custom_minimum_size or the box collapses.
+- ui/common/ui_theme.tres: black/white/gray for Button, Label, LineEdit, ProgressBar, TabBar, ItemList. Set as gui/theme/custom.
+- Beyond the listed steps: theme also styles Panel and PanelContainer, and project.godot default_clear_color is white. Without these, black theme text would sit on Godot's default dark gray.
+- Not themed yet: OptionButton, PopupMenu. inventory-01's Sort dropdown will need them.
+- Removed ui/common/.gitkeep now the folder has files.
+- Verified: `godot_console --headless --path . --import` clean. A throwaway script rendered a screenshot: labels draw, a 48x64 box keeps its size with an overlong label, label_text can change after ready, themed controls look right in their default state. Long text in small boxes is cut off (expected).
+- Not verified: hover, pressed and focus states were not checked visually.
+- godot_console works from Claude's shell in this terminal session, so later iterations can run the check themselves.
+- Next suggested feature: core-autoloads-01.
+
