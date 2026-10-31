@@ -6,6 +6,13 @@ extends RefCounted
 ## the entry's name ("FIGHTER"), never its number. See GameState.to_dict().
 ## Slot enums are the exception: their values are pinned to the slot numbers, so saves store those.
 
+## Starting names on the Create Party screen. Each must be 3-9 characters, with no repeats and at
+## least 4 in total: a re-roll skips the 3 names showing and still needs one left to pick.
+const DEFAULT_HERO_NAMES: Array[String] = [
+	"Chad", "Snubs", "Donker", "Jarnathan", "Snips", "Rancho", "Flaunti", "Knob",
+	"Strank",
+]
+
 ## Hero slots: 3 = front/tank, 1 = back.
 enum HeroSlot { SLOT_1 = 1, SLOT_2 = 2, SLOT_3 = 3 }
 

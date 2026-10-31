@@ -1,40 +1,4 @@
-[gd_resource type="Theme" load_steps=14 format=3]
-
-[sub_resource type="StyleBoxFlat" id="button_normal"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="button_hover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.85, 0.85, 0.85, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="button_pressed"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.2, 0.2, 0.2, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
+[gd_resource type="Theme" format=3 uid="uid://rxqls6vh6bi4"]
 
 [sub_resource type="StyleBoxFlat" id="button_disabled"]
 content_margin_left = 16.0
@@ -60,6 +24,45 @@ expand_margin_top = 3.0
 expand_margin_right = 3.0
 expand_margin_bottom = 3.0
 
+[sub_resource type="StyleBoxFlat" id="button_hover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.85, 0.85, 0.85, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="button_pressed"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.2, 0.2, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="button_normal"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="list_selected"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+
 [sub_resource type="StyleBoxFlat" id="panel"]
 content_margin_left = 8.0
 content_margin_top = 8.0
@@ -71,18 +74,6 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.5, 0.5, 0.5, 1)
-
-[sub_resource type="StyleBoxFlat" id="line_edit_read_only"]
-content_margin_left = 8.0
-content_margin_top = 6.0
-content_margin_right = 8.0
-content_margin_bottom = 6.0
-bg_color = Color(0.92, 0.92, 0.92, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.65, 0.65, 0.65, 1)
 
 [sub_resource type="StyleBoxFlat" id="line_edit_normal"]
 content_margin_left = 8.0
@@ -96,6 +87,18 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="line_edit_read_only"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.92, 0.92, 0.92, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.65, 0.65, 0.65, 1)
+
 [sub_resource type="StyleBoxFlat" id="progress_background"]
 bg_color = Color(1, 1, 1, 1)
 border_width_left = 2
@@ -106,17 +109,6 @@ border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="progress_fill"]
 bg_color = Color(0.3, 0.3, 0.3, 1)
-
-[sub_resource type="StyleBoxFlat" id="tab_selected"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="tab_unselected"]
 content_margin_left = 16.0
@@ -129,8 +121,16 @@ border_width_top = 2
 border_width_right = 2
 border_color = Color(0.5, 0.5, 0.5, 1)
 
-[sub_resource type="StyleBoxFlat" id="list_selected"]
-bg_color = Color(0.2, 0.2, 0.2, 1)
+[sub_resource type="StyleBoxFlat" id="tab_selected"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_color = Color(0, 0, 0, 1)
 
 [resource]
 Button/colors/font_color = Color(0, 0, 0, 1)

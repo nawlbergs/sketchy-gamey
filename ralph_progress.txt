@@ -87,6 +87,20 @@
 - Not verified: an actual gamepad, real mouse clicks, and mouse-wheel scrolling (presses were simulated).
 - Next suggested feature: party-create-01 (needed to start a new game), then overworld-01.
 
+## 2026-10-31 - party-create-01 (Create Party screen) - COMPLETE
+- ui/menus/new_game/party_create.tscn + .gd and reusable hero_slot_panel.tscn + .gd (class HeroSlotPanel, exports slot and class_id). Three columns, slot 1 to 3, left to right: slot label, portrait placeholder, < class > buttons, name box, info box. Back lower left, Begin lower right.
+- Begin is enabled only when all 3 names are 3-9 characters after trimming spaces at the ends. Names are stored trimmed. Duplicate names are allowed.
+- Default classes: slot 1 Mage, slot 2 Priest, slot 3 Fighter, matching each class's best slot.
+- Beyond the step: the info box also shows the weapon's default skill and the class's best-slot blurb, with each skill's damage or heal number.
+- GameState changes: make_hero(name, class_id, slot) now reads stats and starting weapon from Classes.ALL. Heroes gained weapons, mapping a HeroSlot to a WeaponId, kept separate from equipment (gear) so combat can do hero["weapons"][current_slot]. Saved as {"2": "SWORD"}. An unknown weapon name in a save logs an error and leaves that slot empty.
+- Keyboard: the first name box starts focused, and Tab goes name, name, name, Begin. There is no cancel shortcut on this screen, on purpose: Esc beside a half-typed party would be too easy to hit, and Backspace must edit text.
+- Limit: naming needs a keyboard. There is no on-screen keyboard, so gamepad-only players cannot get past this screen. Steam Deck or iPad will need one.
+- Begin fills GameState, then logs "scene file not found" and stays here until overworld-01 adds its scene. This is expected for now.
+- Removed .gitkeep from ui/menus/new_game/.
+- Verified: import clean. Throwaway script in a real window, including typing through real key events: menu path, labels, info text, typing, 9-character limit, Backspace, Esc staying put, Tab order, name rules, class cycling and wrap, every class fitting on screen, Begin's hero data, save round trip for weapons, Back. Screenshot reviewed.
+- Not verified: real mouse clicks and a real gamepad (button presses were simulated).
+- Next suggested feature: overworld-01.
+
 ## 2026-10-31 - data-01 follow-up: enums instead of strings (requested by user)
 - Added resources/game_enums.gd (GameEnums): ClassId, WeaponId, EnemyId, EnemySize, SkillEffect, TargetSide. One shared file so Classes and Weapons need not reference each other.
 - Classes.ALL, Weapons.ALL and Enemies.ALL are now keyed by these enums, and all fields that held id strings use them. Use e.g. Classes.ALL[GameEnums.ClassId.FIGHTER]. The earlier data-01 notes that show strings are out of date.
@@ -100,3 +114,24 @@
 - Verified after the slot change: import clean, 302 checks, no failures, including that Slot equals HeroSlot + EnemySlot in names and values, and that slots survive a save and load.
 - Earlier run, before slots: import clean. Throwaway script, 294 checks, no failures: every enum entry has data, all skill fields are valid, a save stores "MAGE" and loads back as the enum through real JSON, and an unknown class falls back with an error. A search of autoloads, components, resources and ui found no leftover id strings. The earlier SceneRouter and audio checks were not rerun, as that code did not change.
 
+
+## 2026-10-31 - party-create-01 follow-up: default names and name position (requested by user)
+- Removed the "Slot 1 - Back" labels from the Create Party columns. The name box now sits at the top of each column, above the portrait, with centered text. Nothing on the screen says front or back any more; the info text still names the slot number and best slot.
+- Classes.ALL gained default_names (8 per class, 3-9 characters). Each column starts with a random name from its class's list, and columns never share a default.
+- Changing class swaps the name for one from the new class only while it is still the untouched default. Typed names are kept, and a cleared name stays empty.
+- Begin now starts enabled. A default name is selected when its box gets focus, so typing replaces it.
+- This changes the earlier gamepad limit: a gamepad-only player can now accept the defaults and reach Begin. Custom names still need a keyboard.
+- Verified: import clean, real game runs. Throwaway script in a real window, 67 checks, no failures, including real key typing over a default, 300 rounds of all three columns on one class with no repeated name, and a search showing direction actions reach Begin in 3 presses from the first name box. Screenshot reviewed.
+- Not verified: real mouse clicks and a real gamepad (button and direction presses were simulated).
+
+## 2026-10-31 - party-create-01 follow-up: one shared default name list (requested by user)
+- Replaces the per-class default_names in the entry above. Classes.ALL no longer has them; the single list is GameEnums.DEFAULT_HERO_NAMES (24 names) in resources/game_enums.gd.
+- The screen shuffles a copy of the list and deals one name to each column when it opens, so a party never starts with a repeat.
+- Changing class no longer changes the name, default or typed.
+- Verified: import clean, real game runs. Throwaway script in a real window, 66 checks, no failures, including 300 refills with no repeat in a party, the list left unshuffled, and class changes keeping the name. classes.gd is back to its committed contents.
+
+## 2026-10-31 - party-create-01 follow-up: re-roll default names on class change (requested by user)
+- Changing class now picks a new name from GameEnums.DEFAULT_HERO_NAMES, unless the player has edited that name box. Any edit counts, including clearing the box or typing a name that is on the list, and it stays that way for the rest of the visit to the screen.
+- A roll skips every name showing, so a re-roll always changes the name and heroes never match on a default. The list therefore needs at least 4 names; the comment above it says so. The user's own list has 9.
+- This replaces the shuffle in the previous entry: opening the screen uses the same roll, one column at a time.
+- Verified: import clean, real game runs. Throwaway script in a real window, 68 checks, no failures, including 300 rounds of class changes in every column (name always changes, stays on the list, never repeats in the party).

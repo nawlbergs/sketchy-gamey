@@ -27,8 +27,11 @@ func reset() -> void:
 	inventory.resize(INVENTORY_SIZE)
 
 
-## Builds a hero at full health.
-func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.HeroSlot, max_hp: int, speed: int) -> Dictionary:
+## Builds a new hero from class data: full health, with the class's starting weapon in weapon slot
+## slot, which is the hero's primary and only unlocked weapon slot.
+## weapons maps a GameEnums.HeroSlot to a GameEnums.WeaponId. equipment is for gear.
+func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.HeroSlot) -> Dictionary:
+	var data: Dictionary = Classes.ALL[class_id]
 	return {
 		"name": hero_name,
 		"class_id": class_id,
@@ -36,19 +39,24 @@ func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.H
 		"current_slot": slot,
 		"primary_weapon_slot": slot,
 		"unlocked_weapon_slots": [slot],
-		"max_hp": max_hp,
-		"hp": max_hp,
-		"speed": speed,
+		"weapons": {slot: data["starting_weapon"]},
+		"max_hp": data["max_hp"],
+		"hp": data["max_hp"],
+		"speed": data["speed"],
 		"equipment": {},
 	}
 
 
 ## Returns JSON-safe data for saving. The result shares nothing with the live state.
-## class_id is saved as its enum name, so reordering GameEnums cannot break old saves.
+## Classes and weapons are saved as enum names, so reordering GameEnums cannot break old saves.
 func to_dict() -> Dictionary:
 	var saved_party := party.duplicate(true)
 	for hero: Dictionary in saved_party:
 		hero["class_id"] = GameEnums.ClassId.find_key(hero["class_id"])
+		var saved_weapons := {}
+		for slot: int in hero["weapons"]:
+			saved_weapons[str(slot)] = GameEnums.WeaponId.find_key(hero["weapons"][slot])
+		hero["weapons"] = saved_weapons
 	return {
 		"party": saved_party,
 		"gold": gold,
@@ -82,13 +90,22 @@ func _hero_from_dict(data: Dictionary) -> Dictionary:
 	var hero := make_hero(
 		str(data.get("name", "")),
 		GameEnums.ClassId.get(class_key, GameEnums.ClassId.FIGHTER),
-		slot,
-		int(data.get("max_hp", 1)),
-		int(data.get("speed", 0))
+		slot
 	)
 	hero["current_slot"] = int(data.get("current_slot", slot))
 	hero["primary_weapon_slot"] = int(data.get("primary_weapon_slot", slot))
+	hero["max_hp"] = int(data.get("max_hp", hero["max_hp"]))
 	hero["hp"] = int(data.get("hp", hero["max_hp"]))
+	hero["speed"] = int(data.get("speed", hero["speed"]))
+	var weapons := {}
+	var saved_weapons: Dictionary = data.get("weapons", {})
+	for slot_key: Variant in saved_weapons:
+		var weapon_key := str(saved_weapons[slot_key])
+		if GameEnums.WeaponId.has(weapon_key):
+			weapons[int(slot_key)] = GameEnums.WeaponId[weapon_key]
+		else:
+			push_error("GameState: unknown weapon '%s' in save, leaving slot empty" % weapon_key)
+	hero["weapons"] = weapons
 	var unlocked: Array = []
 	for weapon_slot: Variant in data.get("unlocked_weapon_slots", [slot]):
 		unlocked.append(int(weapon_slot))

@@ -1,0 +1,89 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/menus/new_game/party_create.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/menus/new_game/hero_slot_panel.tscn" id="2_panel"]
+
+[node name="PartyCreate" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 24.0
+offset_bottom = 94.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 48
+text = "Create Party"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panels" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 110.0
+offset_right = -40.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="Slot1" parent="Panels" instance=ExtResource("2_panel")]
+layout_mode = 2
+size_flags_horizontal = 3
+slot = 1
+class_id = 1
+
+[node name="Slot2" parent="Panels" instance=ExtResource("2_panel")]
+layout_mode = 2
+size_flags_horizontal = 3
+slot = 2
+class_id = 2
+
+[node name="Slot3" parent="Panels" instance=ExtResource("2_panel")]
+layout_mode = 2
+size_flags_horizontal = 3
+slot = 3
+class_id = 0
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -96.0
+offset_right = 240.0
+offset_bottom = -32.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 28
+text = "Back"
+
+[node name="BeginButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -96.0
+offset_right = -40.0
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 28
+disabled = true
+text = "Begin"

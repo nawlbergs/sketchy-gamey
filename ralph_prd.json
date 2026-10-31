@@ -172,13 +172,14 @@
       "ui/menus/new_game/hero_slot_panel.tscn"
     ],
     "steps": [
-      "Make a reusable HeroSlotPanel: slot label ('Slot 1 - Back' ... 'Slot 3 - Front'), portrait PlaceholderBox, < class name > buttons cycling Fighter/Mage/Priest, LineEdit for name (max 9 chars), and an info box showing the class skill, the class slot skill for THIS slot, and the weapon skill for this slot.",
+      "Make a reusable HeroSlotPanel: LineEdit for name (max 9 chars, prefilled with a random name from GameEnums.DEFAULT_HERO_NAMES) above the portrait PlaceholderBox, < class name > buttons cycling Fighter/Mage/Priest, and an info box showing the class skill, the class slot skill for THIS slot, and the weapon skill for this slot.",
       "Note in the panel that this slot becomes the hero's primary weapon slot.",
       "Begin button lower-right is enabled only when all 3 names are 3-9 characters (plan says > 2 and < 10).",
       "On Begin: GameState.reset(), fill the 3 heroes (start_slot/current_slot/primary_weapon_slot = their column, unlocked_weapon_slots = [that slot], starting weapon equipped there, hp = max_hp), then go to overworld.",
       "Back button lower-left returns to main menu."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Heroes gained a weapons field mapping HeroSlot to WeaponId, separate from equipment (gear), saved by enum name. make_hero() now takes name, class and slot and reads the rest from Classes.ALL. Info box also shows the weapon default skill and best-slot blurb. Begin fills GameState, then logs an error and stays here until overworld-01 adds its scene. Follow-up at the user's request: slot label removed, name box moved above the portrait, and names start as random class defaults, so Begin starts enabled and a gamepad can accept them (custom names still need a keyboard). Import clean; throwaway checks with real key events pass; screenshot reviewed."
   },
   {
     "id": "overworld-01",
