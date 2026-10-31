@@ -7,7 +7,8 @@ Godot 4.7, typed GDScript. The full design lives in `project_plan.txt`; the work
 - **Composition over inheritance.** Build behaviour from small reusable component nodes/Resources in `components/` (HealthComponent, StatsComponent, SkillSetComponent, InteractionComponent...) attached as children. Extend only Godot built-ins plus at most one thin project base class. No Hero/Enemy subclass trees.
 - **Folder structure.** Put every file where the tree below says. Keep a scene's script next to its `.tscn` with the same name (`main_menu.tscn` + `main_menu.gd`). Empty folders keep a `.gitkeep`.
 - **Navigation** goes through the SceneRouter autoload, never raw `change_scene_to_file` calls scattered around.
-- **Slots.** Hero slots are 1-3 (3 = front/tank, 1 = back); enemy slots 4-7 (4 = front, 7 = back). Use these numbers in UI and docs; code may use 0-based indexes but must say so in a comment.
+- **Slots.** Hero slots are 1-3 (3 = front/tank, 1 = back); enemy slots 4-7 (4 = front, 7 = back). In code use `GameEnums.HeroSlot` (1-3), `GameEnums.EnemySlot` (4-7) or `GameEnums.Slot` (all of 1-7, built from those two), whose values equal the slot numbers. Use these numbers in UI and docs; code may use 0-based indexes but must say so in a comment.
+- **Ids are enums.** Refer to classes, weapons, enemies and other fixed game choices through `GameEnums` (`resources/game_enums.gd`), never as strings like `"fighter"`. Add new ones there. Save files store the enum's name (`"FIGHTER"`), never its number, so entries can be reordered safely. Slot enums are the one exception: their values are pinned to the slot numbers, so saves store those numbers.
 - **Out of scope for now:** Status and Quest tabs (show "Coming soon").
 - **Target:** Windows (Steam) first, iPad maybe later. Base resolution 1920x1080, stretch mode `canvas_items`, aspect `expand`.
 
@@ -49,6 +50,7 @@ res://
 │   ├── classes/            Fighter, Mage, Priest
 │   ├── enemies/
 │   ├── items/              weapons, gear, trinkets, combat items
+│   ├── skills/             every skill; classes, weapons and enemies reference them by id
 │   └── tilesets/
 ├── systems/                game logic
 │   ├── combat/             combat scene + turn loop

@@ -88,7 +88,8 @@
       "Numbers are placeholders; keep them simple.",
       "Put each data file in its resources/ subfolder (see '# Folder Structure' in project_plan.txt)."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Classes.ALL, Weapons.ALL and Enemies.ALL are read-only const dictionaries keyed by GameEnums ids (resources/game_enums.gd), referencing skills by GameEnums.SkillId. Skill details live in Skills.ALL (resources/skills/skills.gd), which also describes the skill shape. Skills only do single-target damage or heal for now, since no status or multi-target system exists; the plan's fighter shout buff and bleed sweep are simplified to match. Enemies have no xp/gold rewards yet; combat-loop-01 will need them. Import clean; throwaway validation of every table passes. Balance untested."
   },
   {
     "id": "save-01",
@@ -259,7 +260,7 @@
       "autoloads/game_state.gd"
     ],
     "steps": [
-      "EncounterZone: Area2D exporting zone name, encounter_rate, and an enemy table (e.g. [['muck_ball'], ['muck_ball','muck_ball']]). Place 2 zones with different rates; a safe area with none.",
+      "EncounterZone: Area2D exporting zone name, encounter_rate, and an enemy table of GameEnums.EnemyId values (e.g. [[MUCK_BALL], [MUCK_BALL, MUCK_BALL]]). Place 2 zones with different rates; a safe area with none.",
       "Track distance walked; every N pixels roll against the current zone's rate.",
       "On encounter: save overworld_position, store chosen enemy group in GameState.pending_encounter, go to combat.",
       "After combat, overworld restores the player position. Add a short no-encounter grace period after returning."

@@ -27,8 +27,8 @@ func reset() -> void:
 	inventory.resize(INVENTORY_SIZE)
 
 
-## Builds a hero at full health. slot is the party slot, 1-3 (3 = front, 1 = back).
-func make_hero(hero_name: String, class_id: String, slot: int, max_hp: int, speed: int) -> Dictionary:
+## Builds a hero at full health.
+func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.HeroSlot, max_hp: int, speed: int) -> Dictionary:
 	return {
 		"name": hero_name,
 		"class_id": class_id,
@@ -44,9 +44,13 @@ func make_hero(hero_name: String, class_id: String, slot: int, max_hp: int, spee
 
 
 ## Returns JSON-safe data for saving. The result shares nothing with the live state.
+## class_id is saved as its enum name, so reordering GameEnums cannot break old saves.
 func to_dict() -> Dictionary:
+	var saved_party := party.duplicate(true)
+	for hero: Dictionary in saved_party:
+		hero["class_id"] = GameEnums.ClassId.find_key(hero["class_id"])
 	return {
-		"party": party.duplicate(true),
+		"party": saved_party,
 		"gold": gold,
 		"xp": xp,
 		"xp_to_next": xp_to_next,
@@ -71,10 +75,13 @@ func from_dict(data: Dictionary) -> void:
 
 
 func _hero_from_dict(data: Dictionary) -> Dictionary:
-	var slot := int(data.get("start_slot", 1))
+	var slot := int(data.get("start_slot", GameEnums.HeroSlot.SLOT_1)) as GameEnums.HeroSlot
+	var class_key := str(data.get("class_id", ""))
+	if not GameEnums.ClassId.has(class_key):
+		push_error("GameState: unknown class '%s' in save, using FIGHTER" % class_key)
 	var hero := make_hero(
 		str(data.get("name", "")),
-		str(data.get("class_id", "")),
+		GameEnums.ClassId.get(class_key, GameEnums.ClassId.FIGHTER),
 		slot,
 		int(data.get("max_hp", 1)),
 		int(data.get("speed", 0))

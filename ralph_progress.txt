@@ -33,3 +33,28 @@
 - Open: with audio playing at quit, a headless run reports 4 leaked instances and 2 resources in use (AudioStreamWAV and its playback). The test quit immediately after starting playback, and runs without audio show nothing. Not checked in a windowed run with real playback. Recheck when main-menu-01 adds music and Quit.
 - Next suggested feature: data-01.
 
+## 2026-10-31 - data-01 (Classes, weapons, enemy data) - COMPLETE
+- resources/classes/classes.gd (Classes.ALL): fighter, mage, priest with name, max_hp, speed, starting_weapon, best_slot blurb, class_skill, class_slot_skills {1,2,3}.
+- resources/items/weapons.gd (Weapons.ALL): sword, staff, mace with name, classes (who can equip), default_ability, abilities {1,2,3}.
+- resources/enemies/enemies.gd (Enemies.ALL): muck_ball with name, size, slot_span, max_hp, speed, attack.
+- All skills share one shape, documented at the top of classes.gd: name, description, effect ("damage"/"heal"), amount, target_side ("enemy"/"hero"/"self"), target_slots (game slot numbers, heroes 1-3, enemies 4-7).
+- ALL tables are const, so read-only. Copy a value with duplicate(true) before changing it.
+- Differences from project_plan.txt: skills hit one target and only damage or heal, because no status or multi-target system exists. The fighter's shout "buff" is a small heal, and the bleed sweep is plain damage to one of slots 4-5. Revisit when statuses arrive.
+- Left for later: enemies have no xp/gold rewards (combat-loop-01 needs them). Trinkets, gear and combat items have no data yet.
+- Removed .gitkeep from resources/classes/, resources/enemies/, resources/items/.
+- Verified: import clean. Throwaway script checked every skill's fields, that slot numbers are in range, that each class has a starting weapon it can equip, and that slot tables have keys 1-3. No failures. Numbers are placeholders and balance is untested.
+- Next suggested feature: save-01.
+
+## 2026-10-31 - data-01 follow-up: enums instead of strings (requested by user)
+- Added resources/game_enums.gd (GameEnums): ClassId, WeaponId, EnemyId, EnemySize, SkillEffect, TargetSide. One shared file so Classes and Weapons need not reference each other.
+- Classes.ALL, Weapons.ALL and Enemies.ALL are now keyed by these enums, and all fields that held id strings use them. Use e.g. Classes.ALL[GameEnums.ClassId.FIGHTER]. The earlier data-01 notes that show strings are out of date.
+- GameState: hero class_id is a GameEnums.ClassId. to_dict() saves its name ("MAGE") and from_dict() converts it back, so reordering the enum cannot corrupt saves. An unknown name in a save pushes an error and falls back to FIGHTER. Any enum saved later (weapons in equipment, for example) must do the same.
+- CLAUDE.md gained an "Ids are enums" rule. The encounters-01 step now uses EnemyId.
+- Still strings on purpose: SceneRouter names (few call sites, bad names already give a clear error) and audio ids (they are file names).
+- Slots became enums too, at the user's request: GameEnums.HeroSlot (1-3), EnemySlot (4-7), and Slot (1-7), whose values are defined from those two. Values equal the slot numbers. class_slot_skills and abilities are keyed by HeroSlot, target_slots hold Slot values, and make_hero() takes a HeroSlot.
+- Saves store slots as numbers, not names. This is a deliberate exception to the enum rule, because slot values are pinned and cannot shift when entries are reordered.
+- Skills moved to resources/skills/skills.gd at the user's request: Skills.ALL keyed by GameEnums.SkillId, with the skill shape documented there. Classes, weapons and enemies now hold only SkillIds, so use e.g. Skills.ALL[Classes.ALL[id]["class_skill"]]. Added resources/skills/ to the CLAUDE.md tree. No skill values changed.
+- Verified after the skills move: import clean, 347 checks, no failures, including that every reference exists and every skill is used. A before/after diff of all 25 fully resolved skills, with their class, weapon and enemy data, is identical.
+- Verified after the slot change: import clean, 302 checks, no failures, including that Slot equals HeroSlot + EnemySlot in names and values, and that slots survive a save and load.
+- Earlier run, before slots: import clean. Throwaway script, 294 checks, no failures: every enum entry has data, all skill fields are valid, a save stores "MAGE" and loads back as the enum through real JSON, and an unknown class falls back with an error. A search of autoloads, components, resources and ui found no leftover id strings. The earlier SceneRouter and audio checks were not rerun, as that code did not change.
+
