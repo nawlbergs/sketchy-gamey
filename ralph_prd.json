@@ -225,7 +225,8 @@
       "Reusable HeroStatusWidget: HP bar + a row of small status icon placeholders above a portrait PlaceholderBox and name. Reuse this in combat later.",
       "Gold label bottom-right above the XP bar. HUD refreshes from GameState."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. The HUD reads GameState when the scene starts; anything that changes GameState while the overworld stays open, such as using an item in the escape menu, must call OverworldHud.refresh(). Menu button emits menu_pressed with nothing connected yet, and Esc does nothing until escape-menu-01, which should connect both. Status icons are 3 empty placeholder boxes per hero because heroes have no statuses yet. The player can walk behind the HUD in the bottom corners of the map. Import clean; throwaway checks pass; screenshots reviewed."
   },
   {
     "id": "dialogue-01",

@@ -147,3 +147,17 @@
 - Verified: import clean, real game runs. Throwaway script in a real window, 39 checks, no failures: Begin and a real save file's Load row both arrive, real D/S/A key events, analog angle and half speed, simulated stick and deadzone, top-left and bottom-right walls and camera limits, rock blocking and sliding, off-map position, reset. Screenshots reviewed; they caught the HERO label wrapping, now fixed with a smaller font.
 - Not verified: a real gamepad, window sizes other than 1920x1080, smoothness on monitors above 60 Hz (the player moves on 60 Hz physics ticks with no interpolation).
 - Next suggested feature: overworld-hud-01.
+
+## 2026-10-31 - overworld-hud-01 (Overworld HUD) - COMPLETE
+- ui/hud/overworld_hud.tscn/.gd: CanvasLayer added to the overworld scene. Menu button top-left, XP bar along the bottom at 95% width with "XP 40 / 100" text, three hero widgets above it on the left, gold panel above it on the right.
+- ui/hud/hero_status_widget.tscn/.gd: class HeroStatusWidget, show_hero(hero) with status icon row, HP bar with numbers, portrait and name. Long names end in "...". Widgets show party order, and any without a hero are hidden. combat-layout-01 wants the bar and icons without the portrait, so it will need a way to hide the portrait.
+- The HUD reads GameState when the scene starts, and refresh() updates it. There is no change signal on GameState because party data is plain dictionaries. Anything that changes GameState while the overworld stays open, such as using an item in the escape menu, must call refresh(). Combat is a scene change, so it needs nothing.
+- Menu button: emits menu_pressed, with nothing connected until escape-menu-01. Esc does nothing yet. The button never takes focus, because Space and Enter must not press it during play. It works by mouse only.
+- Status icons are 3 empty placeholder boxes per hero, with no label because the text does not fit at 24x24. Heroes have no statuses yet.
+- Theme change: progress bar fill went from dark gray to lighter gray, so black numbers read clearly on it. This applies to every ProgressBar.
+- Known: the player can walk behind the HUD in the bottom corners of the map, since the camera stops at the map edge.
+- Removed .gitkeep from ui/hud/.
+- A failed test run hung because a script error stops a check before quit; check runs now use a time limit.
+- Verified: import clean, real game runs. Throwaway script in a real window, 32 checks, no failures: values, layout, refresh, values above the old maximum, zero HP, xp_to_next 0, numbers after a save round trip, partial and empty party, real mouse click on Menu, Space and Enter not pressing it, player movement, a 2560x1080 window. The 39 overworld checks still pass. Screenshots reviewed.
+- Not verified: a real mouse by hand, a real gamepad.
+- Next suggested feature: dialogue-01.

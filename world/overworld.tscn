@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://world/overworld.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://ui/common/placeholder_box.tscn" id="2_box"]
 [ext_resource type="PackedScene" path="res://characters/heroes/overworld_player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://ui/hud/overworld_hud.tscn" id="4_hud"]
 
 [sub_resource type="WorldBoundaryShape2D" id="edge_top"]
 normal = Vector2(0, 1)
@@ -228,4 +229,7 @@ unique_name_in_owner = true
 position = Vector2(1300, 1400)
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
+unique_name_in_owner = true
+
+[node name="Hud" parent="." instance=ExtResource("4_hud")]
 unique_name_in_owner = true
