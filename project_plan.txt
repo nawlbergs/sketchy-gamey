@@ -157,3 +157,58 @@ Initial mockup of game can be full of placeholders... but would be nice to have 
 # Target Platform
   - Windows (steam)
   - Ipad (maybe later - lets not rule it out)
+
+# Code style
+  - prefer composition over inheritance
+  - prefer to structure feature files together
+
+# Folder Structure
+  (folder layout borrowed from game-with-dad; folders only)
+  res://
+  ├── _production_files/      source files that are not imported into the game
+  │   ├── assets/             raw sketches / source art
+  │   └── mockups/            screen mockups
+  ├── assets/                 imported art, audio, fonts
+  │   ├── art/
+  │   │   ├── characters/
+  │   │   ├── objects/
+  │   │   ├── tilesets/
+  │   │   └── placeholder/    gray-box placeholder images
+  │   ├── audio/
+  │   │   ├── music/
+  │   │   └── sfx/
+  │   └── fonts/
+  ├── autoloads/              global singletons (GameState, SceneRouter, AudioManager, SaveManager)
+  ├── characters/             scenes built from components
+  │   ├── heroes/             overworld player, hero combat units
+  │   ├── enemies/            Muck Ball etc.
+  │   └── npcs/
+  ├── components/             small reusable nodes (composition over inheritance)
+  │   ├── combat_stats/
+  │   ├── health/
+  │   ├── interaction/
+  │   ├── inventory/
+  │   ├── movement/
+  │   └── skill_set/
+  ├── resources/              game data (.gd data / .tres)
+  │   ├── classes/            Fighter, Mage, Priest
+  │   ├── enemies/
+  │   ├── items/              weapons, gear, trinkets, combat items
+  │   └── tilesets/
+  ├── systems/                game logic
+  │   ├── combat/             combat scene + turn loop
+  │   ├── dialogue/
+  │   ├── encounter/          encounter zones + random rolls
+  │   └── party/
+  ├── ui/
+  │   ├── combat/
+  │   ├── common/             PlaceholderBox, theme, shared widgets
+  │   ├── dialogue/
+  │   ├── hud/                overworld HUD, hero status widget
+  │   ├── inventory/
+  │   └── menus/
+  │       ├── main_menu/
+  │       ├── load_game/
+  │       ├── new_game/       create party screen
+  │       └── escape_menu/
+  └── world/                  overworld map scenes

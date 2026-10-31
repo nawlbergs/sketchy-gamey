@@ -1,12 +1,384 @@
 [
   {
-    "category": "example",
-    "description": "desc goes here",
+    "id": "setup-01",
+    "priority": 1,
+    "depends_on": [],
+    "category": "setup",
+    "description": "Project foundation: folder layout, display settings, input map, and a CLAUDE.md with conventions so later iterations stay consistent.",
     "important_files": [
-      "... path to file"
+      "project.godot",
+      "CLAUDE.md",
+      "project_plan.txt"
     ],
     "steps": [
-      "Step here"
+      "Create the folder structure exactly as drawn in the '# Folder Structure' section of project_plan.txt (add a .gitkeep to empty folders). Every later feature must put its files in the folders that section describes.",
+      "In project.godot set display/window/size/viewport_width=1920, viewport_height=1080, display/window/stretch/mode=\"canvas_items\", display/window/stretch/aspect=\"expand\" (target is Windows now, maybe iPad later).",
+      "Add input actions: move_up/move_down/move_left/move_right (WASD + arrow keys + gamepad left stick), interact (E, Space, gamepad A), menu (Esc, gamepad Start), confirm (Enter, Space), cancel (Esc, Backspace).",
+      "Write CLAUDE.md: Godot 4.7, typed GDScript. Keep every image a placeholder (see PlaceholderBox) sized/positioned where real art will go. Code style: (1) prefer composition over inheritance: build behaviour from small reusable component nodes/Resources (e.g. HealthComponent, StatsComponent, SkillSetComponent, InteractionComponent) attached as children, not deep class hierarchies; extend only Godot built-ins plus at most one thin project base class. (2) Structure files per the '# Folder Structure' section of project_plan.txt: copy that tree into CLAUDE.md, and keep a scene's script next to its .tscn with the same name.",
+      "Add .claude_output.txt to .gitignore (ralph.sh temp file).",
+      "Verify: if godot_console is on PATH, run `godot_console --headless --path . --quit` and fix any errors it prints."
+    ],
+    "complete": false
+  },
+  {
+    "id": "ui-placeholder-01",
+    "priority": 2,
+    "depends_on": [
+      "setup-01"
+    ],
+    "category": "ui",
+    "description": "Reusable placeholder visuals: white box with gray border that stretches to any size, plus a shared UI theme.",
+    "important_files": [
+      "ui/common/placeholder_box.tscn",
+      "ui/common/placeholder_box.gd",
+      "ui/common/ui_theme.tres"
+    ],
+    "steps": [
+      "Create PlaceholderBox (PanelContainer or Panel) using a StyleBoxFlat: white fill, 2-4px gray border. Export a `label_text` string drawn centered in gray (e.g. 'HERO PORTRAIT') so it is obvious what art goes there.",
+      "Create ui/common/ui_theme.tres with simple black/white/gray styling for Button, Label, LineEdit, ProgressBar, TabBar, ItemList, and set it as the project default theme (gui/theme/custom).",
+      "Use only these placeholders for art in every later feature."
+    ],
+    "complete": false
+  },
+  {
+    "id": "core-autoloads-01",
+    "priority": 3,
+    "depends_on": [
+      "setup-01"
+    ],
+    "category": "core",
+    "description": "Global singletons: GameState (party, gold, xp, overworld position), SceneRouter (scene switching by name), AudioManager (stub music/sfx calls).",
+    "important_files": [
+      "autoloads/game_state.gd",
+      "autoloads/scene_router.gd",
+      "autoloads/audio_manager.gd",
+      "project.godot",
+      "components/health/health_component.gd",
+      "components/combat_stats/stats_component.gd"
+    ],
+    "steps": [
+      "Create components/health/health_component.gd (max_hp, hp, damage(), heal(), signals hp_changed/died) and components/combat_stats/stats_component.gd (speed etc.). Heroes in GameState hold plain data; scenes that show a unit attach these components rather than subclassing.",
+      "GameState: `party: Array` of 3 hero dictionaries or a Hero Resource {name, class_id, start_slot (1-3), current_slot, primary_weapon_slot (= start_slot), unlocked_weapon_slots, max_hp, hp, speed, equipment{}}, plus gold:int, xp:int, xp_to_next:int, overworld_position:Vector2, inventory:Array (36 slots). Add `reset()` and `to_dict()/from_dict()` for saving.",
+      "SceneRouter: `go_to(name: String)` mapping names (main_menu, load_game, party_create, overworld, combat) to scene paths, using change_scene_to_file. Add a short fade if easy, otherwise plain switch.",
+      "AudioManager: `play_music(id)` and `play_sfx(id)` that play a file from assets/audio/music/ or assets/audio/sfx/ if it exists and silently do nothing otherwise.",
+      "Register all three as autoloads in project.godot."
+    ],
+    "complete": false
+  },
+  {
+    "id": "data-01",
+    "priority": 4,
+    "depends_on": [
+      "core-autoloads-01"
+    ],
+    "category": "data",
+    "description": "First-pass game data for hero classes (Fighter, Mage, Priest) and one enemy (Muck Ball), including slot-based skill names so UI has something real to show.",
+    "important_files": [
+      "resources/classes/classes.gd",
+      "resources/enemies/enemies.gd",
+      "resources/items/weapons.gd"
+    ],
+    "steps": [
+      "classes.gd: a const Dictionary for fighter, mage, priest: display name, base max_hp, speed, starting weapon id, class_skill (always available), class_slot_skills {1,2,3} with a one-line description each, and a short 'best slot' blurb for the party-creation screen.",
+      "weapons.gd: one starter weapon per class (e.g. sword, staff, mace) each with default_ability and abilities for slots 1, 2, 3 (name, damage/heal number, target rule like 'enemy slot 4-5').",
+      "enemies.gd: muck_ball: size 'sm' (1 slot), max_hp, speed, one attack. Leave room for md/lg/xl sizes (slot_span field).",
+      "Numbers are placeholders; keep them simple.",
+      "Put each data file in its resources/ subfolder (see '# Folder Structure' in project_plan.txt)."
+    ],
+    "complete": false
+  },
+  {
+    "id": "save-01",
+    "priority": 5,
+    "depends_on": [
+      "core-autoloads-01"
+    ],
+    "category": "core",
+    "description": "SaveManager: save/load/list games as JSON in user://saves/.",
+    "important_files": [
+      "autoloads/save_manager.gd",
+      "project.godot"
+    ],
+    "steps": [
+      "save_game(save_name) writes GameState.to_dict() plus save_name and timestamp to user://saves/<sanitized_name>.json.",
+      "list_saves() returns [{save_name, timestamp, path}] newest first; has_saves() -> bool.",
+      "load_game(path) reads JSON and calls GameState.from_dict(). autosave() saves to a fixed 'autosave' slot.",
+      "Register as autoload."
+    ],
+    "complete": false
+  },
+  {
+    "id": "main-menu-01",
+    "priority": 6,
+    "depends_on": [
+      "ui-placeholder-01",
+      "core-autoloads-01",
+      "save-01"
+    ],
+    "category": "screen",
+    "description": "Main menu: background image + title placeholders, centered vertical buttons, music, set as the project's main scene.",
+    "important_files": [
+      "ui/menus/main_menu/main_menu.tscn",
+      "ui/menus/main_menu/main_menu.gd",
+      "project.godot"
+    ],
+    "steps": [
+      "Full-screen PlaceholderBox background ('BACKGROUND ART') and a title label/placeholder near the top.",
+      "Centered vertical VBox: Continue / Load Game (hidden or disabled when SaveManager.has_saves() is false), New Game, Quit.",
+      "New Game -> SceneRouter.go_to('party_create'); Load Game -> 'load_game'; Quit -> get_tree().quit().",
+      "Call AudioManager.play_music('main_menu'). Set run/main_scene to this scene."
+    ],
+    "complete": false
+  },
+  {
+    "id": "load-game-01",
+    "priority": 7,
+    "depends_on": [
+      "main-menu-01",
+      "save-01"
+    ],
+    "category": "screen",
+    "description": "Load game screen: scrolling list of saves, Back button lower left.",
+    "important_files": [
+      "ui/menus/load_game/load_game.tscn",
+      "ui/menus/load_game/load_game.gd"
+    ],
+    "steps": [
+      "ScrollContainer with one row per save (name + date). Show 'No saved games' when empty.",
+      "Clicking a row loads it via SaveManager then SceneRouter.go_to('overworld').",
+      "Back button anchored lower-left returns to main menu; cancel action does the same."
+    ],
+    "complete": false
+  },
+  {
+    "id": "party-create-01",
+    "priority": 8,
+    "depends_on": [
+      "main-menu-01",
+      "data-01"
+    ],
+    "category": "screen",
+    "description": "Create Party screen: 3 hero columns (slot 1 to 3, left to right) with class cycling, name entry and a slot explanation; Back lower left, Begin lower right.",
+    "important_files": [
+      "ui/menus/new_game/party_create.tscn",
+      "ui/menus/new_game/party_create.gd",
+      "ui/menus/new_game/hero_slot_panel.tscn"
+    ],
+    "steps": [
+      "Make a reusable HeroSlotPanel: slot label ('Slot 1 - Back' ... 'Slot 3 - Front'), portrait PlaceholderBox, < class name > buttons cycling Fighter/Mage/Priest, LineEdit for name (max 9 chars), and an info box showing the class skill, the class slot skill for THIS slot, and the weapon skill for this slot.",
+      "Note in the panel that this slot becomes the hero's primary weapon slot.",
+      "Begin button lower-right is enabled only when all 3 names are 3-9 characters (plan says > 2 and < 10).",
+      "On Begin: GameState.reset(), fill the 3 heroes (start_slot/current_slot/primary_weapon_slot = their column, unlocked_weapon_slots = [that slot], starting weapon equipped there, hp = max_hp), then go to overworld.",
+      "Back button lower-left returns to main menu."
+    ],
+    "complete": false
+  },
+  {
+    "id": "overworld-01",
+    "priority": 9,
+    "depends_on": [
+      "core-autoloads-01",
+      "ui-placeholder-01"
+    ],
+    "category": "overworld",
+    "description": "Overworld scene with a placeholder map and a player that moves freely in any direction (not grid-locked).",
+    "important_files": [
+      "world/overworld.tscn",
+      "world/overworld.gd",
+      "characters/heroes/overworld_player.tscn",
+      "characters/heroes/overworld_player.gd"
+    ],
+    "steps": [
+      "Build a simple map large enough to scroll (e.g. 3000x3000) out of placeholder ground areas (grass/forest look-alikes can just be differently labeled boxes or ColorRects) and a few StaticBody2D obstacles plus map-edge walls.",
+      "Player: CharacterBody2D with PlaceholderBox sprite (~48x64), Input.get_vector for analog any-angle movement, move_and_slide, and a `facing: Vector2` updated from last non-zero input.",
+      "Camera2D follows the player with limits set to the map bounds.",
+      "On ready, place the player at GameState.overworld_position if set; keep it updated while moving."
+    ],
+    "complete": false
+  },
+  {
+    "id": "overworld-hud-01",
+    "priority": 10,
+    "depends_on": [
+      "overworld-01",
+      "party-create-01"
+    ],
+    "category": "overworld",
+    "description": "Overworld HUD: Menu button top-left, wide XP bar at the bottom, 3 hero portraits with HP bars/status icons above XP bar on the left, gold on the right.",
+    "important_files": [
+      "ui/hud/overworld_hud.tscn",
+      "ui/hud/overworld_hud.gd",
+      "ui/hud/hero_status_widget.tscn"
+    ],
+    "steps": [
+      "CanvasLayer HUD. Menu button top-left (opens escape menu once it exists; emit a signal for now).",
+      "ProgressBar XP bar along the bottom, ~95% screen width, driven by GameState.xp / xp_to_next.",
+      "Reusable HeroStatusWidget: HP bar + a row of small status icon placeholders above a portrait PlaceholderBox and name. Reuse this in combat later.",
+      "Gold label bottom-right above the XP bar. HUD refreshes from GameState."
+    ],
+    "complete": false
+  },
+  {
+    "id": "dialogue-01",
+    "priority": 11,
+    "depends_on": [
+      "overworld-01"
+    ],
+    "category": "overworld",
+    "description": "Interact with things in front of the player and a basic dialogue box (read text, press a button to advance).",
+    "important_files": [
+      "ui/dialogue/dialogue_box.tscn",
+      "ui/dialogue/dialogue_box.gd",
+      "characters/npcs/npc.tscn",
+      "components/interaction/interactable_component.gd"
+    ],
+    "steps": [
+      "Make components/interaction/interactable_component.gd: a child node that marks its parent as interactable and holds what happens on interact. Player gets an InteractionComponent (RayCast2D/Area2D along `facing`) that calls it when interact is pressed.",
+      "NPC scene (PlaceholderBox) exporting `lines: Array[String]` and an optional speaker name; place one NPC on the map.",
+      "DialogueBox on a CanvasLayer at the bottom of the screen: speaker name, text, '▼' prompt; confirm/interact advances, closes after last line. Player movement is disabled while it is open.",
+      "Expose a simple `DialogueBox.show_lines(lines)` so story scripts can use it later."
+    ],
+    "complete": false
+  },
+  {
+    "id": "encounters-01",
+    "priority": 12,
+    "depends_on": [
+      "overworld-01",
+      "data-01"
+    ],
+    "category": "overworld",
+    "description": "Random encounters based on zone/terrain the player stands on, transitioning to combat and back.",
+    "important_files": [
+      "systems/encounter/encounter_zone.tscn",
+      "systems/encounter/encounter_zone.gd",
+      "characters/heroes/overworld_player.gd",
+      "autoloads/game_state.gd"
+    ],
+    "steps": [
+      "EncounterZone: Area2D exporting zone name, encounter_rate, and an enemy table (e.g. [['muck_ball'], ['muck_ball','muck_ball']]). Place 2 zones with different rates; a safe area with none.",
+      "Track distance walked; every N pixels roll against the current zone's rate.",
+      "On encounter: save overworld_position, store chosen enemy group in GameState.pending_encounter, go to combat.",
+      "After combat, overworld restores the player position. Add a short no-encounter grace period after returning."
+    ],
+    "complete": false
+  },
+  {
+    "id": "combat-layout-01",
+    "priority": 13,
+    "depends_on": [
+      "data-01",
+      "overworld-hud-01"
+    ],
+    "category": "combat",
+    "description": "Combat screen layout (Darkest Dungeon style side view): battle area top 2/3, action panel bottom 1/3, turn queue top-left.",
+    "important_files": [
+      "systems/combat/combat.tscn",
+      "systems/combat/combat.gd",
+      "ui/combat/unit_slot.tscn"
+    ],
+    "steps": [
+      "Top 2/3: 3 hero slot markers on the left (slot 1 far left/back, slot 3 nearest centre/front) and 4 enemy slot markers on the right (slot 4 nearest centre/front, slot 7 far right/back). Heroes face right, enemies face left.",
+      "Units are PlaceholderBox figures; an enemy's width spans 1-4 slots by size (sm/md/lg/xl). HeroStatusWidget-style HP bar and status icons under each unit.",
+      "Turn queue strip top-left: small portrait placeholders, current unit leftmost.",
+      "Bottom 1/3 two columns. Left: selected hero portrait + name and buttons: Weapon Skill, Weapon Slot Skill, Class Skill, Class Slot Skill, Trinket 1, Trinket 2, Item 1, Item 2, Move (shows cooldown), Pass. Unavailable buttons are disabled. Right: info panel for whatever unit is hovered.",
+      "Build from GameState.party and GameState.pending_encounter (fallback: one muck_ball for testing when run directly).",
+      "Combat units are one CombatUnit scene composed of HealthComponent + StatsComponent + SkillSetComponent children, configured from hero or enemy data. Do NOT make Hero/Enemy subclasses."
+    ],
+    "complete": false
+  },
+  {
+    "id": "combat-loop-01",
+    "priority": 14,
+    "depends_on": [
+      "combat-layout-01",
+      "encounters-01"
+    ],
+    "category": "combat",
+    "description": "Minimal working turn loop: initiative, choose skill + target, enemy turns, win/lose.",
+    "important_files": [
+      "systems/combat/combat.gd",
+      "components/skill_set/skill_set_component.gd"
+    ],
+    "steps": [
+      "Initiative: each unit rolls speed + randi_range(0, N); sort descending to fill the turn queue; rebuild each round.",
+      "SkillSetComponent resolves skills by current slot: weapon skill = default ability of weapon in the weapon slot matching current_slot, else primary weapon slot; weapon slot skill = that weapon's ability for current_slot; class skill and class slot skill from data. Labels update when the hero moves.",
+      "Hero turn: pick skill, click a valid target (highlight valid targets), apply placeholder damage/heal, advance queue.",
+      "Move: swap with an adjacent hero, does not end the turn, then goes on cooldown. Pass: hero is pushed back a random number of places in the queue.",
+      "Enemy turn: Muck Ball attacks a random living hero (slightly favour front slots).",
+      "Win: grant xp/gold to GameState, return to overworld. All heroes dead: simple 'Defeated' message then main menu."
+    ],
+    "complete": false
+  },
+  {
+    "id": "escape-menu-01",
+    "priority": 15,
+    "depends_on": [
+      "overworld-hud-01",
+      "save-01"
+    ],
+    "category": "menu",
+    "description": "Escape menu overlay: Inventory / Status / Quest tabs top-left, Save and Exit buttons top-right; pauses the overworld.",
+    "important_files": [
+      "ui/menus/escape_menu/escape_menu.tscn",
+      "ui/menus/escape_menu/escape_menu.gd",
+      "world/overworld.gd"
+    ],
+    "steps": [
+      "Opened by the 'menu' action or the HUD Menu button; pauses the tree (menu uses process_mode ALWAYS); Esc closes it.",
+      "Tabs top-left: Inventory, Status, Quest. Status and Quest just show a 'Coming soon' label (out of scope).",
+      "Top-right Save button opens a small save panel: LineEdit for save name + Save button calling SaveManager.save_game; show 'Saved'.",
+      "Top-right Exit button calls SaveManager.autosave() then returns to the main menu (unpause first)."
+    ],
+    "complete": false
+  },
+  {
+    "id": "inventory-01",
+    "priority": 16,
+    "depends_on": [
+      "escape-menu-01",
+      "data-01"
+    ],
+    "category": "menu",
+    "description": "Inventory tab layout with hero tabs, ragdoll + stats, equipment slots, 6x6 grid and hover/selected compare panels.",
+    "important_files": [
+      "ui/inventory/inventory_tab.tscn",
+      "ui/inventory/inventory_tab.gd",
+      "ui/inventory/item_slot.tscn"
+    ],
+    "steps": [
+      "Left half: 3 hero tabs on top. Below, sub-column 1 = ragdoll PlaceholderBox with stats list under it; sub-column 2 = equip slots: Weapon 1/2/3, Head, Necklace, Ring 1, Body, Ring 2, Trinket 1, Boots, Trinket 2, Combat Item 1, Combat Item 2. Locked weapon slots look locked (only unlocked_weapon_slots usable).",
+      "Right half: 'Sort' dropdown above a 6x6 grid of reusable ItemSlot buttons. Seed GameState.inventory with 2-3 dummy items for testing.",
+      "Below the grid: left panel shows info for the hovered item, right panel for the clicked (selected) item.",
+      "Equipping/drag-drop is NOT required yet; layout and hover/select info only."
+    ],
+    "complete": false
+  },
+  {
+    "id": "smoke-test-01",
+    "priority": 17,
+    "depends_on": [
+      "main-menu-01",
+      "load-game-01",
+      "party-create-01",
+      "overworld-hud-01",
+      "dialogue-01",
+      "encounters-01",
+      "combat-loop-01",
+      "escape-menu-01",
+      "inventory-01"
+    ],
+    "category": "qa",
+    "description": "End-to-end pass of the shell game: everything connects and nothing errors.",
+    "important_files": [
+      "CLAUDE.md",
+      "ralph_progress.txt"
+    ],
+    "steps": [
+      "Trace the flow in code: main menu -> new game -> party create -> overworld -> talk to NPC -> random encounter -> combat win -> overworld -> escape menu -> save -> exit -> main menu -> load game -> overworld.",
+      "If godot_console is on PATH, run `godot_console --headless --path . --quit` and fix all script/scene errors.",
+      "Fix broken scene paths, missing autoload references and signal hookups. Record anything that needs a human to test by hand in ralph_progress.txt.",
+      "Check code style: every file sits where the '# Folder Structure' section of project_plan.txt says, and no inheritance chains where a component would do."
     ],
     "complete": false
   }
