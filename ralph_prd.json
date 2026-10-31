@@ -1,0 +1,13 @@
+[
+  {
+    "category": "example",
+    "description": "desc goes here",
+    "important_files": [
+      "... path to file"
+    ],
+    "steps": [
+      "Step here"
+    ],
+    "complete": false
+  }
+]
