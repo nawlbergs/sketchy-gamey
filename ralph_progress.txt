@@ -75,6 +75,18 @@
 - Verified: import clean, and the real game runs. Every SceneId has a route, and go_to(MAIN_MENU) really fades and changes scene. Passing a string is rejected when the script compiles. Main menu checks still pass.
 - Next suggested feature: load-game-01.
 
+## 2026-10-31 - load-game-01 (Load game screen) - COMPLETE
+- ui/menus/load_game/load_game.tscn + .gd: title, scrolling list of saves (newest first), Back lower left. Cancel (Esc, Backspace, pad B) also returns to the main menu.
+- Rows read "YYYY-MM-DD HH:MM     Save name" in the player's local time. The date comes first because long names are cut off at the right. The time zone offset is today's, so saves from the other side of a daylight saving change can show one hour off.
+- "No saved games" shows centered when the list is empty. "Could not load that save" shows at the bottom if a file fails to load, and game state stays as it was.
+- The first row takes focus (Back if empty), and the list scrolls to follow keyboard or gamepad focus.
+- Choosing a working save loads it, then logs "scene file not found" and stays on this screen until overworld-01 adds its scene. This is expected for now.
+- Screenshots caught two layout problems the checks missed: the empty message looked misplaced beside Back, and rows touched the scrollbar with the focus outline cut off. Both fixed.
+- Scrollbar is still Godot's default look (dark gray); it was not in the theme list for ui-placeholder-01 and suits the black/white/gray style well enough.
+- Verified: import clean. Throwaway script in a real window: empty state, 16 rows with a very long name, order, local date, scrolling with ui_down, Back, a real Backspace key event through the project input map, the menu's Load Game button, loading the right save, and a save deleted after the list was built. Temporary saves removed.
+- Not verified: an actual gamepad, real mouse clicks, and mouse-wheel scrolling (presses were simulated).
+- Next suggested feature: party-create-01 (needed to start a new game), then overworld-01.
+
 ## 2026-10-31 - data-01 follow-up: enums instead of strings (requested by user)
 - Added resources/game_enums.gd (GameEnums): ClassId, WeaponId, EnemyId, EnemySize, SkillEffect, TargetSide. One shared file so Classes and Weapons need not reference each other.
 - Classes.ALL, Weapons.ALL and Enemies.ALL are now keyed by these enums, and all fields that held id strings use them. Use e.g. Classes.ALL[GameEnums.ClassId.FIGHTER]. The earlier data-01 notes that show strings are out of date.

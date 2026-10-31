@@ -154,7 +154,8 @@
       "Clicking a row loads it via SaveManager then SceneRouter.go_to(GameEnums.SceneId.OVERWORLD).",
       "Back button anchored lower-left returns to main menu; cancel action does the same."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Rows show local date first, then save name, so long names cannot hide the date. A failed load shows 'Could not load that save' and keeps the current game state. Choosing a working save loads it, then logs an error and stays here until overworld-01 adds its scene. Import clean; throwaway checks pass; screenshots reviewed."
   },
   {
     "id": "party-create-01",
