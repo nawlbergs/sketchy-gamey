@@ -89,6 +89,4 @@ func _refresh() -> void:
 
 
 func _skill_text(heading: String, skill_id: GameEnums.SkillId) -> String:
-	var skill: Dictionary = Skills.ALL[skill_id]
-	var effect := "%d damage" if skill["effect"] == GameEnums.SkillEffect.DAMAGE else "heals %d"
-	return "%s: %s (%s)\n%s" % [heading, skill["name"], effect % skill["amount"], skill["description"]]
+	return "%s: %s" % [heading, Skills.summary(skill_id)]

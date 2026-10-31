@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://ui/combat/combat_unit.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/hud/status_bars.tscn" id="2_bars"]
+[ext_resource type="Script" path="res://components/health/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://components/combat_stats/stats_component.gd" id="4_stats"]
+[ext_resource type="Script" path="res://components/skill_set/skill_set_component.gd" id="5_skills"]
+
+[node name="CombatUnit" type="VBoxContainer"]
+mouse_filter = 0
+theme_override_constants/separation = 6
+script = ExtResource("1_script")
+
+[node name="Figure" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StatusBars" parent="." instance=ExtResource("2_bars")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ChargeBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+show_percentage = false
+
+[node name="SelectionBar" type="ColorRect" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.2, 0.2, 0.2, 1)
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("3_health")
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("4_stats")
+
+[node name="SkillSet" type="Node" parent="."]
+script = ExtResource("5_skills")

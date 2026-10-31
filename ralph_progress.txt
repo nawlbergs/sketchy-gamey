@@ -199,3 +199,26 @@
 - Verified: import clean, real game runs. Throwaway script in a real window: 41 checks without a combat scene, 44 with a temporary empty one (removed afterwards), no failures. Covers every ground box's label against its zone, safe area, standing still, pushing a wall, rate 0, rate 1 triggering at exactly 600 pixels, dialogue, group from the right table, position restored after a real trip and back, grace after returning. Overworld, dialogue, HUD, party and doll checks still pass.
 - Not verified: how often fights feel at the real 10% and 25% rates. Rolls were only run at rates 0 and 1 through the game, and nobody has played it.
 - Next suggested feature: combat-layout-01.
+
+## 2026-10-31 - combat-layout-01 (Combat screen layout) - COMPLETE
+- Built to the user's sketch, _production_files/mockups/combat-drawing.png, which they shared part way through this item. systems/combat/combat.tscn/.gd: battle area top 2/3, two equal columns in the bottom 1/3.
+- Turn queue top-left: the current unit larger, a divider, then the rest. Order is fastest first for now; combat-loop-01 adds the roll.
+- ui/combat/combat_unit.tscn/.gd: class CombatUnit, one scene for heroes and enemies with HealthComponent, StatsComponent and SkillSetComponent children. Heroes draw a HeroDoll, enemies a labeled box sized by data. Each slot is labeled, and larger enemies span several slots.
+- ui/hud/status_bars.tscn/.gd: split out of HeroStatusWidget so the HUD and combat use the same status icons and HP bar, as the plan asks.
+- components/skill_set/skill_set_component.gd: resolves a unit's 4 skills by slot, with the weapon falling back to the primary weapon slot. Added here because hovering a button needs it; combat-loop-01 also needs it. GameEnums.SkillKind added. Skills.summary() added and now also used by the party screen.
+- Lower left: selected hero's doll, name, class and the sketch's buttons 1 2 3 4 m / T1 T2 I1 I2 x. The buttons do nothing yet. T and I are disabled. Clicking a hero selects them, with the dark bar beneath them from the sketch. Lower right: whatever is hovered, otherwise the current unit, as the sketch says.
+- Beyond the sketch: hovering a button shows that skill or action in the right panel, because the buttons only carry numbers.
+- Assumptions to confirm: the second bar on heroes in the sketch is shown empty and assumed to be Move charge. The sketch's main drawing has T1 T2 I1 I2, and a smaller one has I1-I4; the main one was used, matching the plan's 2 trinkets and 2 combat items. The sketch's "dodge" is left out, since no such stat exists.
+- Temporary: an "End fight (temp)" button top-right clears the encounter and returns to the overworld, since a fight otherwise has no end. combat-loop-01 must remove it; that is now in its steps, along with the sketch's differences from its Move and Pass step.
+- Limits: mouse only for now. The placeholder doll faces front, so heroes do not visibly face right, and no weapon is drawn. The party is not updated by anything here. Enemy size spans only tested through code paths with the SM Muck Ball, the only enemy; MD, LG and XL have not been seen on screen.
+- Theme: progress bar edges went from black to gray, because the fill's black edge was cutting through digits.
+- Removed .gitkeep from systems/combat/, ui/combat/ and components/skill_set/. characters/enemies/ stays empty.
+- Verified: import clean, real game runs. Throwaway script in a real window, 72 checks, no failures, with simulated mouse movement and clicks: proportions, positions, data, skills by slot, queue, selection, hover, button states, 1-5 enemies, no encounter, no party, End fight, 2560x1080. Encounter checks now reach the real combat scene. Overworld, dialogue, HUD, party and doll checks still pass. Screenshots reviewed.
+- Not verified: a real mouse by hand, a real gamepad.
+- Next suggested feature: combat-loop-01.
+
+## 2026-10-31 - combat-loop-01 scope decided by the user
+- The sketch is an old brainstorm: good for layout, not rules. This replaces the "assumptions to confirm" in the combat-layout-01 entry.
+- For combat-loop-01: only skill 1 (weapon skill) works, and buttons 2-4 and m may do nothing. Rest/Pass effects, skill charges and dodge are left out, and the stat list will change later. The hero's second bar stays empty; the user thinks it may be a resource.
+- My addition to the step: x ends the turn with no other effect, so a hero with no valid target can't get stuck. Removed the step's Move, Pass and skill-resolving parts to match.
+- Move and Rest hover text now says "Not working yet" instead of the sketch's old rules. Combat checks still pass (72).

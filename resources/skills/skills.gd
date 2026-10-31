@@ -11,6 +11,14 @@ extends RefCounted
 ##   target_slots: GameEnums.Slot values it can target. Empty when target_side is SELF.
 ## Skills hit one target.
 
+
+## Two lines of display text: the skill's name and amount, then its description.
+static func summary(skill_id: GameEnums.SkillId) -> String:
+	var skill: Dictionary = ALL[skill_id]
+	var effect := "%d damage" if skill["effect"] == GameEnums.SkillEffect.DAMAGE else "heals %d"
+	return "%s (%s)\n%s" % [skill["name"], effect % skill["amount"], skill["description"]]
+
+
 const ALL: Dictionary = {
 	# Fighter
 	GameEnums.SkillId.SECOND_WIND: {

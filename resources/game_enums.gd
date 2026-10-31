@@ -74,5 +74,7 @@ enum SkillId {
 	# Enemies
 	MUCK_SPLAT,
 }
-enum SkillEffect { DAMAGE, HEAL }
+## The four skills a unit's skill set can hold, matching combat buttons 1 to 4.
+enum SkillKind { WEAPON, WEAPON_SLOT, CLASS, CLASS_SLOT }
+enum SkillEffect{ DAMAGE, HEAL }
 enum TargetSide { ENEMY, HERO, SELF }

@@ -320,7 +320,8 @@
       "Build from GameState.party and GameState.pending_encounter (fallback: one muck_ball for testing when run directly).",
       "Combat units are one CombatUnit scene composed of HealthComponent + StatsComponent + SkillSetComponent children, configured from hero or enemy data. Do NOT make Hero/Enemy subclasses."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31, following the user's sketch at _production_files/mockups/combat-drawing.png. Unit scene is ui/combat/combat_unit.tscn. Buttons are the sketch's 1 2 3 4 m / T1 T2 I1 I2 x and do nothing yet. Heroes have an empty second bar from the sketch; the user thinks it may be a resource and it stays empty for now. Queue order is speed only until combat-loop-01 adds the roll. A temporary End fight button is the only way out; combat-loop-01 removes it. Status panel shows health and speed; there is no dodge stat. StatusBars was split out of HeroStatusWidget so the HUD and combat share it. Mouse only so far. Import clean; throwaway checks pass; screenshots reviewed."
   },
   {
     "id": "combat-loop-01",
@@ -336,10 +337,11 @@
       "components/skill_set/skill_set_component.gd"
     ],
     "steps": [
+      "Scope decided by the user 2026-10-31: only skill 1 (weapon skill) works for now; buttons 2-4 and m may do nothing. The sketch at _production_files/mockups/combat-drawing.png is an old brainstorm, useful for layout but not rules. Leave out Rest/Pass effects, skill charges, the hero's second bar (stays empty, possibly a resource) and dodge; the stat list will change later. No weapon changes or inventory during a fight.",
+      "Remove the temporary End fight button from systems/combat/combat.tscn and clear GameState.pending_encounter when a fight ends.",
       "Initiative: each unit rolls speed + randi_range(0, N); sort descending to fill the turn queue; rebuild each round.",
-      "SkillSetComponent resolves skills by current slot: weapon skill = default ability of weapon in the weapon slot matching current_slot, else primary weapon slot; weapon slot skill = that weapon's ability for current_slot; class skill and class slot skill from data. Labels update when the hero moves.",
-      "Hero turn: pick skill, click a valid target (highlight valid targets), apply placeholder damage/heal, advance queue.",
-      "Move: swap with an adjacent hero, does not end the turn, then goes on cooldown. Pass: hero is pushed back a random number of places in the queue.",
+      "Hero turn: pick skill 1, click a valid target (highlight valid targets), apply placeholder damage, advance queue.",
+      "x ends the hero's turn with no other effect, so a hero with no valid target can't get stuck.",
       "Enemy turn: Muck Ball attacks a random living hero (slightly favour front slots).",
       "Win: grant xp/gold to GameState, return to overworld. All heroes dead: simple 'Defeated' message then main menu."
     ],

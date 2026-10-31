@@ -1,0 +1,213 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/combat/combat.gd" id="1_script"]
+
+[node name="Combat" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="BattleArea" type="Control" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+
+[node name="TurnQueue" type="HBoxContainer" parent="Layout/BattleArea"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 24.0
+offset_bottom = 112.0
+theme_override_constants/separation = 8
+
+[node name="EndFightButton" type="Button" parent="Layout/BattleArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 72.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 22
+text = "End fight (temp)"
+
+[node name="Units" type="HBoxContainer" parent="Layout/BattleArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 120.0
+offset_right = -48.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Heroes" type="HBoxContainer" parent="Layout/BattleArea/Units"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Gap" type="Control" parent="Layout/BattleArea/Units"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Enemies" type="HBoxContainer" parent="Layout/BattleArea/Units"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="BottomArea" type="HBoxContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="SelectedPanel" type="PanelContainer" parent="Layout/BottomArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Row" type="HBoxContainer" parent="Layout/BottomArea/SelectedPanel"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Portrait" type="PanelContainer" parent="Layout/BottomArea/SelectedPanel/Row"]
+custom_minimum_size = Vector2(200, 240)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SelectedPortrait" type="MarginContainer" parent="Layout/BottomArea/SelectedPanel/Row/Portrait"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="NameColumn" type="VBoxContainer" parent="Layout/BottomArea/SelectedPanel/Row"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="SelectedName" type="Label" parent="Layout/BottomArea/SelectedPanel/Row/NameColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text_overrun_behavior = 3
+
+[node name="SelectedClass" type="Label" parent="Layout/BottomArea/SelectedPanel/Row/NameColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="ButtonGrid" type="GridContainer" parent="Layout/BottomArea/SelectedPanel/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
+[node name="Skill1" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "1"
+
+[node name="Skill2" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "2"
+
+[node name="Skill3" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "3"
+
+[node name="Skill4" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "4"
+
+[node name="MoveButton" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "m"
+
+[node name="Trinket1" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+disabled = true
+text = "T1"
+
+[node name="Trinket2" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+disabled = true
+text = "T2"
+
+[node name="Item1" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+disabled = true
+text = "I1"
+
+[node name="Item2" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+disabled = true
+text = "I2"
+
+[node name="RestButton" type="Button" parent="Layout/BottomArea/SelectedPanel/Row/ButtonGrid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "x"
+
+[node name="InfoPanel" type="PanelContainer" parent="Layout/BottomArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InfoLabel" type="Label" parent="Layout/BottomArea/InfoPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
