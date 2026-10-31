@@ -1,12 +1,12 @@
 extends CanvasLayer
-## Switches scenes by name with a short fade. All navigation goes through go_to().
+## Switches scenes with a short fade. All navigation goes through go_to().
 
 const SCENES: Dictionary = {
-	"main_menu": "res://ui/menus/main_menu/main_menu.tscn",
-	"load_game": "res://ui/menus/load_game/load_game.tscn",
-	"party_create": "res://ui/menus/new_game/party_create.tscn",
-	"overworld": "res://world/overworld.tscn",
-	"combat": "res://systems/combat/combat.tscn",
+	GameEnums.SceneId.MAIN_MENU: "res://ui/menus/main_menu/main_menu.tscn",
+	GameEnums.SceneId.LOAD_GAME: "res://ui/menus/load_game/load_game.tscn",
+	GameEnums.SceneId.PARTY_CREATE: "res://ui/menus/new_game/party_create.tscn",
+	GameEnums.SceneId.OVERWORLD: "res://world/overworld.tscn",
+	GameEnums.SceneId.COMBAT: "res://systems/combat/combat.tscn",
 }
 const FADE_SECONDS := 0.2
 
@@ -25,13 +25,10 @@ func _ready() -> void:
 
 
 ## Calls made while a switch is already running are ignored, so double clicks are safe.
-func go_to(scene_name: String) -> void:
+func go_to(scene: GameEnums.SceneId) -> void:
 	if _switching:
 		return
-	if not SCENES.has(scene_name):
-		push_error("SceneRouter: unknown scene name '%s'" % scene_name)
-		return
-	var path: String = SCENES[scene_name]
+	var path: String = SCENES[scene]
 	if not ResourceLoader.exists(path):
 		push_error("SceneRouter: scene file not found: %s" % path)
 		return

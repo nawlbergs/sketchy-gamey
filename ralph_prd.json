@@ -66,7 +66,7 @@
       "Register all three as autoloads in project.godot."
     ],
     "complete": true,
-    "notes": "Done 2026-10-31. GameState heroes are dictionaries built by GameState.make_hero(). SceneRouter fades 0.2s to black and reports unknown names or missing scene files with push_error; only the placeholder_box test scene has been switched to so far, because the five real scenes do not exist yet. AudioManager checks .ogg, .mp3, .wav in that order and always loops music. Import clean; 26 throwaway behaviour checks pass. Open: Godot reports 4 leaked instances at exit if audio is playing when the game quits (seen headless only); recheck when main-menu-01 adds music and Quit."
+    "notes": "Done 2026-10-31. GameState heroes are dictionaries built by GameState.make_hero(). SceneRouter fades 0.2s to black and reports unknown names or missing scene files with push_error; only the placeholder_box test scene has been switched to so far, because the five real scenes do not exist yet. AudioManager checks .ogg, .mp3, .wav in that order and always loops music. Import clean; 26 throwaway behaviour checks pass. Godot reports leaked audio objects at exit if audio is playing when the game quits; see main-menu-01 notes."
   },
   {
     "id": "data-01",
@@ -133,7 +133,8 @@
       "New Game -> SceneRouter.go_to('party_create'); Load Game -> 'load_game'; Quit -> get_tree().quit().",
       "Call AudioManager.play_music('main_menu'). Set run/main_scene to this scene."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. One Load Game button, hidden when there are no saves, as project_plan.txt describes one entry. Load Game and New Game log an error and stay on the menu until load-game-01 and party-create-01 add their scenes. Import clean, real game runs, 14 throwaway checks pass, screenshots reviewed. Known: Godot prints a leak warning at exit when music is playing; exit code is 0. Stopping players in _exit_tree did not help, so it was removed."
   },
   {
     "id": "load-game-01",
@@ -150,7 +151,7 @@
     ],
     "steps": [
       "ScrollContainer with one row per save (name + date). Show 'No saved games' when empty.",
-      "Clicking a row loads it via SaveManager then SceneRouter.go_to('overworld').",
+      "Clicking a row loads it via SaveManager then SceneRouter.go_to(GameEnums.SceneId.OVERWORLD).",
       "Back button anchored lower-left returns to main menu; cancel action does the same."
     ],
     "complete": false

@@ -57,6 +57,24 @@
 - Not checked: failure paths for a full disk or an unwritable folder.
 - Next suggested feature: main-menu-01.
 
+## 2026-10-31 - main-menu-01 (Main menu) - COMPLETE
+- ui/menus/main_menu/main_menu.tscn + .gd: full-screen BACKGROUND ART placeholder, GAME TITLE placeholder near the top, centered Load Game / New Game / Quit. Set as run/main_scene. Calls AudioManager.play_music("main_menu").
+- One Load Game button rather than separate Continue and Load Game, matching the single entry in project_plan.txt. Hidden when there are no saves, and an autosave counts as a save.
+- The first visible button takes focus, so keyboard and gamepad work from the start.
+- Load Game and New Game log "scene file not found" and stay on the menu until load-game-01 and party-create-01 add their scenes. This is expected for now.
+- Resolves the core-autoloads-01 open item: the leak warning at exit is real, not a test artifact. With music playing, the real game in a real window, with no test script, prints 2 leaked instances (AudioStreamWAV and its playback) and 1 resource in use, then exits with code 0. Stopping players and clearing streams in AudioManager._exit_tree did not change it, so that was removed. Cause not confirmed. It only shows in the console at exit, so it was left as is. Delaying quit until audio has stopped would be the next thing to try.
+- Verified: import clean. `godot_console --headless --path . --quit-after 120` runs the real game with no errors. Throwaway script in a real window, 14 checks, no failures: layout, focus, ui_accept presses the focused button, ui_down moves focus, Load Game shows and hides with a temporary save (removed afterwards). Screenshots reviewed. Temporary music file deleted afterwards.
+- Not verified: an actual gamepad, and window sizes other than 1920x1080. The real mouse was not used; presses were simulated.
+- Next suggested feature: overworld-01 or load-game-01 (party-create-01 is also available).
+
+## 2026-10-31 - Follow-up: scene names are enums (requested by user)
+- Added GameEnums.SceneId: MAIN_MENU, LOAD_GAME, PARTY_CREATE, OVERWORLD, COMBAT. SceneRouter.go_to() takes a SceneId, and its table is keyed by it. Main menu updated. This replaces the earlier decision to keep scene names as strings. Older entries in this log and the done steps in ralph_prd.json that show go_to("name") are out of date.
+- Removed the router's "unknown scene name" error, as the type now rules that out. A missing scene file still logs an error and stays put.
+- Audio ids stay strings, as they are file names.
+- Updated CLAUDE.md navigation and enum rules, and the load-game-01 step.
+- Verified: import clean, and the real game runs. Every SceneId has a route, and go_to(MAIN_MENU) really fades and changes scene. Passing a string is rejected when the script compiles. Main menu checks still pass.
+- Next suggested feature: load-game-01.
+
 ## 2026-10-31 - data-01 follow-up: enums instead of strings (requested by user)
 - Added resources/game_enums.gd (GameEnums): ClassId, WeaponId, EnemyId, EnemySize, SkillEffect, TargetSide. One shared file so Classes and Weapons need not reference each other.
 - Classes.ALL, Weapons.ALL and Enemies.ALL are now keyed by these enums, and all fields that held id strings use them. Use e.g. Classes.ALL[GameEnums.ClassId.FIGHTER]. The earlier data-01 notes that show strings are out of date.

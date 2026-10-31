@@ -23,6 +23,7 @@ enum Slot {
 	SLOT_7 = EnemySlot.SLOT_7,
 }
 
+enum SceneId { MAIN_MENU, LOAD_GAME, PARTY_CREATE, OVERWORLD, COMBAT }
 enum ClassId { FIGHTER, MAGE, PRIEST }
 enum WeaponId { SWORD, STAFF, MACE }
 enum EnemyId { MUCK_BALL }
