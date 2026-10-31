@@ -1,0 +1,29 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Godot 3.x specific ignores
+#.import/
+
+# Imported assets (Godot 3.x used .import at the root/subfolders, Godot 4 uses .godot/)
+# If you are on Godot 3, uncomment .import above
+
+# Technical and temporary files
+bin/
+builds/
+lib/
+*.translation
+
+# Editor settings (specific to individual developers)
+.editorconfig
+editor_settings-*
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini

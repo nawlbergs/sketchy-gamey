@@ -1,0 +1,150 @@
+# Untitled Game
+# Overview
+Mix of American Final Fantasy/FF (NES) for overworld and Darkest Dungeon (combat).  Players create a party of 3 right at start of game.
+ - Overworld 
+   - Top Down RPG (like final fantasy) 
+   - Random Enemy encounters based on your zone + tile standing on.
+ - Combat
+   - Turn based side view (similar to darkest dungeon)
+ - Party
+   - 3 Character Party (3 Heroes)
+ - Art Style
+   - I'll be doing sketches (mostly black and white art)
+   - We will use placeholder graphics/audio for all assets until they are created.  Images can be just a white square with a gray border (stretched to size/shape).  Audio can be... well anything at this point (maybe just a soft noise appropriate for what it is.
+
+Initial mockup of game can be full of placeholders... but would be nice to have things sized/positioned to fill in with art/assets.
+
+# Game Flow
+## Starting Game (Main Menu) UI
+ - Player is presented screen with options (centered and vertical).. music and image/title in background.
+   - Continue "Load Game" (if available), List of saved games is presented when clicked
+       - Display a scrolling list of saved games.
+       - Back button lower left.
+   - New Game "Create Party" screen presented when clicked
+       - Player can rotate thro available classes for each member (hero) in their new party.
+       - 3 Portraits w/ Ability to enter name (left to right). since combat is similar to darkest dungeon, the "Slot/Position" a hero is in matters.... might need a spot to explain or "show" what this hero can do in the party slot the player chooses.
+       - Hero in slot 1 will have weapon slot 1 unlocked, slot 2 = weapon slot 2 etc. (more below) (the slot you start the game at defines your "primary" weapon slot.
+       - Back button lower left.
+       - Begin Button lower right (if all characters have a name > 2 and < 10 characters long)
+
+# Overworld 
+  - Very similar to Final Fantasy (FF) overworld.  
+  - Random Enemy encounters based on scene/tile player is on.
+  - Unlike FF, players can move not just up,down,left,right... they can move in any direction (any degree, like a little bit diagonal etc... So, not constrained to move from square to square)
+  - Needs an interaction for things directly in front of player
+  - Needs a conversation/animation system to play through story. (first draft can just have converstion system (player reads and hits button to continue to next story text)
+
+## Overworld UI
+  - Menu (esc) button in top left
+  - Experience bar on bottom of screen (stretching almost full width of screen)
+  - Just above experience bar, left side of screen we have the 3 portraits of our heros
+    - above each portrait, health bars and status icons (if any)
+  - Just above experience bar, right side (party gold total)
+
+# Escape Menu (inventory/status/quest log, etc)
+## Top Menu
+  The escape menu will have 3 tabs across the top/left and two buttons on top/right
+  - Top Left Tabs
+    - Inventory
+    - Status
+    - Quest
+  - Top Right Buttons
+    - Save
+      - Goes to scene to save game (enter an name to hit save button)
+    - Exit (saves game and exits)
+
+## Inventory Tab/Scene
+  - Two columns (left is image of hero/ragdoll) and inventory slots. Right is inventory slots.
+    - Left column
+      - Three tabs on top to switch between heroes
+      Below that, again, split into two sub columns
+        - Left Column
+          - Rag Doll/image of hero	
+          - Stats below it
+        - Right Column - All of the slots to equip items
+          - Equippable items
+            - 3 weapon slots, head, necklace, ring1, body, ring2, trinket1, boots, trinket2, and 2 combat item. (only 1 weapon slot is available at start of game)
+    - Right Column (Inventory)
+      - Inventory 6x6 Grid (sort dropdown above it - right side)
+      - Below grid are two areas - again - 2 columns (compare area)
+        - Left col (hover item)
+        - Right col (selected item)
+        Clicking an item (the button tbd) selects it and displays stats/info in the right column.  Hovering over any item displays stats/info in left. (allowing easy item compare with any item)
+
+## Status Tab/Scene (TBD)
+## Quest Tab/Scene (TBD)
+
+
+# Combat
+  Similar in style to darkest dungeon (side view). Enemies face each other.
+  - Heroes stand in "slots" or positions (1-3) left side of screen.  The right position (3) is considered a place for more "tanky" heroes. back (0) is attacked a bit less and better for healer/mages.
+  - Enemies stand in "slots" or positions (4-7) right side of screen. The left (4) is considered a place for more "tanky" heroes. back (7) is attacked a bit less and better for healer/mages.
+  (in this doc we say slots 1-7 but we can do 0-6 in code if needed)
+
+## UI
+  - the 3 heroes on left.
+  - enemies on right (4 slots)
+    - enemies can be sm (1 slot)
+    - md (2 slots)
+    - lg (3 slots)
+    - xl (4 slots)
+  - player turn queue on top left (small portraits of current queue) left is current characters turn.
+  - Battle area in top 2/3 of screen. Lefts side heroes, right side enemies.
+    - Below heroes are same health bar/status icons from overworld.
+    - player can click/select a hero (which displays their actions etc in lower left - see below)
+    - lower 1/3 of screen is 2 column (similar to darkest dungeon)
+      - left column 
+        - heroes portrait/name
+        - buttons/combat abilities/actions for selected hero
+           - weapon skill 1
+           - weapon skill 2 (slot based)
+           - class skill 1
+           - class skill 2 (slot based) 
+           - 2 trinket skills (if available)
+           - 2 combat items (if available)
+      - right column
+        - info of hero/enemy that is hovered over
+
+## combat start
+  - each unit rolls their speed + random num to generate an initial turn order to populate player turn queue
+
+## weapons 
+  - all weapons will have 4 abilities
+    - default ability - this is the ability the weapon can use no matter what slot the hero is in.
+    - ability 1 - ability also available if hero is standing in slot 1
+    - ability 2 - ability also available if hero is standing in slot 2
+    - ability 3 - ability also available if hero is standing in slot 3
+
+
+## combat abilities available to heroes during their turn of combat
+  - weapon skill (default ability) (based on equipped weapon in slot corresponding to the slot your standing in).
+    - Example: if hero is in slot 1, and has a sword equipped in inventory weapon slot 1, weapon skill will be the default ability (for the sword).
+    - Example: if hero moves to slot 2, but has not equipped a weapon into inventory weapon slot 2, the primary weapons slot (the one unlocked at game start) is used.
+  - weapon skill slot based
+    - Example: if hero has sword equipped and is in slot 1, he might do a stab attack (sword ability 1)
+    - Example: if hero has sword equipped and moves to slot 2, this ability will change to sword ability 2.
+    - Example: if hero has sword equipped and moves to slot 3, this ability will change to sword ability 3.
+  - class based skill (this skill never changes and is based on your class) ie: paladin might have a single target heal.
+  - class based skill (slot based) skill that changes based your the slot the hero is standing in
+    - Example: if fighter hero is in slot 1, he might perform a shout "buff"
+    - Example: if fighter hero is in slot 3, he might perform a sweep bleed attack to front two enemy slots.
+  - Move: move does not consume the turn but is cooldown based.
+  - Trinket skill 1 (if available)
+  - Trinket skill 1 (if available)
+  - Combat item skill 1 (if available)
+  - Combat item skill 1 (if available)
+	
+# Weapon slots: weapon slots are special
+  - there are 3 weapon slots (1,2,3) (two of them are locked at start of game)
+  - the initial (and primary) weapon slot is that is unlocked is determined by the heroes "slot" when the game is created.
+  - when a weapon is equipped into a slot, 
+
+# weapons, gear & trinkets
+  - restricted to certain classes  
+
+# Combat items
+  - any class can equip and use combat items
+
+
+ 
+ 	
