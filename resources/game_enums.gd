@@ -33,6 +33,9 @@ enum Slot {
 enum SceneId { MAIN_MENU, LOAD_GAME, PARTY_CREATE, OVERWORLD, COMBAT }
 enum ClassId { FIGHTER, MAGE, PRIEST }
 enum WeaponId { SWORD, STAFF, MACE }
+## Gear slots that show on the hero doll. Necklace, rings, boots and the rest get added with their items.
+enum GearSlot { HEAD, BODY }
+enum GearId { LEATHER_CAP, LEATHER_ARMOR }
 enum EnemyId { MUCK_BALL }
 enum EnemySize { SM, MD, LG, XL }
 enum SkillId {

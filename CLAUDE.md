@@ -36,7 +36,7 @@ res://
 │   └── fonts/
 ├── autoloads/              global singletons (GameState, SceneRouter, AudioManager, SaveManager)
 ├── characters/             scenes built from components
-│   ├── heroes/             overworld player, hero combat units
+│   ├── heroes/             overworld player, hero doll (rag doll shown wherever a hero appears in UI), hero combat units
 │   ├── enemies/            Muck Ball etc.
 │   └── npcs/
 ├── components/             small reusable nodes (composition over inheritance)

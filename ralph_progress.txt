@@ -161,3 +161,15 @@
 - Verified: import clean, real game runs. Throwaway script in a real window, 32 checks, no failures: values, layout, refresh, values above the old maximum, zero HP, xp_to_next 0, numbers after a save round trip, partial and empty party, real mouse click on Menu, Space and Enter not pressing it, player movement, a 2560x1080 window. The 39 overworld checks still pass. Screenshots reviewed.
 - Not verified: a real mouse by hand, a real gamepad.
 - Next suggested feature: dialogue-01.
+
+## 2026-10-31 - hero-doll-01 (Hero rag doll, added at the user's request) - COMPLETE
+- characters/heroes/hero_doll.tscn/.gd: class HeroDoll, one reusable doll with a pill body, round head and round hands. It scales to fit any size. Create Party and HeroStatusWidget now use it in place of their portrait boxes. The PRD steps for the inventory tab and combat panel now name it too.
+- show_equipment(equipment) takes a hero's equipment dictionary (GearSlot to GearId). Empty slots show the bare body or head. Layers back to front: body, armor, head, helm, hands, so hands stay on top of armor.
+- Art: each item names a file in Gear.ALL under assets/art/characters/gear/. If the file exists the doll draws it, stretched to the layer and keeping its shape. If not, it draws a gray placeholder shape labeled with the item's name. No art exists yet.
+- New data: GameEnums.GearSlot (HEAD, BODY) and GearId, plus resources/items/gear.gd. Leather Cap and Leather Armor are placeholder items so there is something to show. Heroes still start with no gear; a default is undecided, and the party screen would need to pass it to the doll.
+- Saves: equipment is now stored by enum name ({"HEAD": "LEATHER_CAP"}). Unknown names log an error and are left off. Saves with no equipment or an empty one still load.
+- Not built: head color and face. The Head node is where they will go. Nothing in play can equip gear yet.
+- The doll is the same for every class, since nothing in the request ties looks to class.
+- Earlier check script fix: since overworld-01, Begin really leaves the screen, so the party check's Back test had gone stale. It now tests Back on a fresh screen.
+- Verified: import clean, real game runs. Throwaway script in a real window, 36 checks with no art and 37 with a temporary real image for the cap (removed afterwards), no failures: both screens, fit at several sizes, gear combinations, taking gear off, save round trip, unknown names. Party (69), HUD (32) and overworld (39) checks all pass. Screenshots reviewed.
+- Next suggested feature: dialogue-01.

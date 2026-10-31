@@ -29,7 +29,8 @@ func reset() -> void:
 
 ## Builds a new hero from class data: full health, with the class's starting weapon in weapon slot
 ## slot, which is the hero's primary and only unlocked weapon slot.
-## weapons maps a GameEnums.HeroSlot to a GameEnums.WeaponId. equipment is for gear.
+## weapons maps a GameEnums.HeroSlot to a GameEnums.WeaponId. equipment maps a GameEnums.GearSlot
+## to a GameEnums.GearId, and starts empty.
 func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.HeroSlot) -> Dictionary:
 	var data: Dictionary = Classes.ALL[class_id]
 	return {
@@ -48,7 +49,7 @@ func make_hero(hero_name: String, class_id: GameEnums.ClassId, slot: GameEnums.H
 
 
 ## Returns JSON-safe data for saving. The result shares nothing with the live state.
-## Classes and weapons are saved as enum names, so reordering GameEnums cannot break old saves.
+## Classes, weapons and gear are saved as enum names, so reordering GameEnums cannot break old saves.
 func to_dict() -> Dictionary:
 	var saved_party := party.duplicate(true)
 	for hero: Dictionary in saved_party:
@@ -57,6 +58,10 @@ func to_dict() -> Dictionary:
 		for slot: int in hero["weapons"]:
 			saved_weapons[str(slot)] = GameEnums.WeaponId.find_key(hero["weapons"][slot])
 		hero["weapons"] = saved_weapons
+		var saved_equipment := {}
+		for gear_slot: int in hero["equipment"]:
+			saved_equipment[GameEnums.GearSlot.find_key(gear_slot)] = GameEnums.GearId.find_key(hero["equipment"][gear_slot])
+		hero["equipment"] = saved_equipment
 	return {
 		"party": saved_party,
 		"gold": gold,
@@ -110,6 +115,13 @@ func _hero_from_dict(data: Dictionary) -> Dictionary:
 	for weapon_slot: Variant in data.get("unlocked_weapon_slots", [slot]):
 		unlocked.append(int(weapon_slot))
 	hero["unlocked_weapon_slots"] = unlocked
-	var equipment: Dictionary = data.get("equipment", {})
-	hero["equipment"] = equipment.duplicate(true)
+	var equipment := {}
+	var saved_equipment: Dictionary = data.get("equipment", {})
+	for slot_key: Variant in saved_equipment:
+		var gear_key := str(saved_equipment[slot_key])
+		if GameEnums.GearSlot.has(str(slot_key)) and GameEnums.GearId.has(gear_key):
+			equipment[GameEnums.GearSlot[str(slot_key)]] = GameEnums.GearId[gear_key]
+		else:
+			push_error("GameState: unknown gear '%s: %s' in save, leaving it off" % [slot_key, gear_key])
+	hero["equipment"] = equipment
 	return hero

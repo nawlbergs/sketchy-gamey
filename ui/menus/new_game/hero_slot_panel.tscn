@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://ui/menus/new_game/hero_slot_panel.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://ui/common/placeholder_box.tscn" id="2_box"]
+[ext_resource type="PackedScene" path="res://characters/heroes/hero_doll.tscn" id="2_doll"]
 
 [node name="HeroSlotPanel" type="PanelContainer"]
 script = ExtResource("1_script")
@@ -18,10 +18,9 @@ theme_override_font_sizes/font_size = 24
 alignment = 1
 select_all_on_focus = true
 
-[node name="Portrait" parent="Layout" instance=ExtResource("2_box")]
+[node name="Portrait" parent="Layout" instance=ExtResource("2_doll")]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-label_text = "HERO PORTRAIT"
 
 [node name="ClassRow" type="HBoxContainer" parent="Layout"]
 layout_mode = 2

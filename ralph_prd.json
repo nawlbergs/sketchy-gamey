@@ -229,6 +229,29 @@
     "notes": "Done 2026-10-31. The HUD reads GameState when the scene starts; anything that changes GameState while the overworld stays open, such as using an item in the escape menu, must call OverworldHud.refresh(). Menu button emits menu_pressed with nothing connected yet, and Esc does nothing until escape-menu-01, which should connect both. Status icons are 3 empty placeholder boxes per hero because heroes have no statuses yet. The player can walk behind the HUD in the bottom corners of the map. Import clean; throwaway checks pass; screenshots reviewed."
   },
   {
+    "id": "hero-doll-01",
+    "priority": 10,
+    "depends_on": [
+      "party-create-01",
+      "overworld-hud-01"
+    ],
+    "category": "ui",
+    "description": "Added at the user's request: one reusable hero rag doll (pill body, round head and hands) that shows equipped helm and armor, replacing the static portraits on Create Party and the overworld HUD.",
+    "important_files": [
+      "characters/heroes/hero_doll.tscn",
+      "characters/heroes/hero_doll.gd",
+      "resources/items/gear.gd"
+    ],
+    "steps": [
+      "HeroDoll scene that scales to any size, with layers for body, armor, head, helm and hands.",
+      "show_equipment(hero equipment) shows each item's art file, or a labeled placeholder shape until that file exists.",
+      "GearSlot and GearId enums and Gear.ALL data; heroes start with no gear; equipment saved by enum name.",
+      "Use it on Create Party and in HeroStatusWidget."
+    ],
+    "complete": true,
+    "notes": "Done 2026-10-31. Later: customizable head color and face (not built yet), default starting gear (undecided), real gear art at the paths in Gear.ALL. Leather Cap and Leather Armor are placeholder items, and nothing equips them in play until inventory work allows it. Import clean; throwaway checks pass, including a temporary real image file; screenshots reviewed."
+  },
+  {
     "id": "dialogue-01",
     "priority": 11,
     "depends_on": [
@@ -291,7 +314,7 @@
       "Top 2/3: 3 hero slot markers on the left (slot 1 far left/back, slot 3 nearest centre/front) and 4 enemy slot markers on the right (slot 4 nearest centre/front, slot 7 far right/back). Heroes face right, enemies face left.",
       "Units are PlaceholderBox figures; an enemy's width spans 1-4 slots by size (sm/md/lg/xl). HeroStatusWidget-style HP bar and status icons under each unit.",
       "Turn queue strip top-left: small portrait placeholders, current unit leftmost.",
-      "Bottom 1/3 two columns. Left: selected hero portrait + name and buttons: Weapon Skill, Weapon Slot Skill, Class Skill, Class Slot Skill, Trinket 1, Trinket 2, Item 1, Item 2, Move (shows cooldown), Pass. Unavailable buttons are disabled. Right: info panel for whatever unit is hovered.",
+      "Bottom 1/3 two columns. Left: selected hero's HeroDoll + name and buttons: Weapon Skill, Weapon Slot Skill, Class Skill, Class Slot Skill, Trinket 1, Trinket 2, Item 1, Item 2, Move (shows cooldown), Pass. Unavailable buttons are disabled. Right: info panel for whatever unit is hovered.",
       "Build from GameState.party and GameState.pending_encounter (fallback: one muck_ball for testing when run directly).",
       "Combat units are one CombatUnit scene composed of HealthComponent + StatsComponent + SkillSetComponent children, configured from hero or enemy data. Do NOT make Hero/Enemy subclasses."
     ],
@@ -357,7 +380,7 @@
       "ui/inventory/item_slot.tscn"
     ],
     "steps": [
-      "Left half: 3 hero tabs on top. Below, sub-column 1 = ragdoll PlaceholderBox with stats list under it; sub-column 2 = equip slots: Weapon 1/2/3, Head, Necklace, Ring 1, Body, Ring 2, Trinket 1, Boots, Trinket 2, Combat Item 1, Combat Item 2. Locked weapon slots look locked (only unlocked_weapon_slots usable).",
+      "Left half: 3 hero tabs on top. Below, sub-column 1 = HeroDoll (characters/heroes/hero_doll.tscn) with stats list under it; sub-column 2 = equip slots: Weapon 1/2/3, Head, Necklace, Ring 1, Body, Ring 2, Trinket 1, Boots, Trinket 2, Combat Item 1, Combat Item 2. Locked weapon slots look locked (only unlocked_weapon_slots usable).",
       "Right half: 'Sort' dropdown above a 6x6 grid of reusable ItemSlot buttons. Seed GameState.inventory with 2-3 dummy items for testing.",
       "Below the grid: left panel shows info for the hovered item, right panel for the clicked (selected) item.",
       "Equipping/drag-drop is NOT required yet; layout and hover/select info only."
