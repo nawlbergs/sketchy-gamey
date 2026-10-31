@@ -45,6 +45,18 @@
 - Verified: import clean. Throwaway script checked every skill's fields, that slot numbers are in range, that each class has a starting weapon it can equip, and that slot tables have keys 1-3. No failures. Numbers are placeholders and balance is untested.
 - Next suggested feature: save-01.
 
+## 2026-10-31 - save-01 (SaveManager) - COMPLETE
+- autoloads/save_manager.gd, registered in project.godot: save_game(name), autosave(), load_game(path), list_saves() (newest first), has_saves(). Each save file is GameState.to_dict() plus save_name and timestamp (Unix seconds).
+- Named saves go in user://saves/save_<sanitized>.json: lowercase, anything but a-z 0-9 _ - becomes _, cut to 64 characters. The prefix keeps them clear of autosave.json and Windows reserved names like CON. The original name is kept inside the file for display.
+- Names that sanitize the same ("a b" and "a_b") share one file, so the later save replaces the earlier one. Same-name saves overwrite, so escape-menu-01 may want a confirmation.
+- Saves are written to a .tmp file, then renamed, so a crash cannot destroy the existing save.
+- load_game returns false and leaves GameState untouched for a missing or invalid file. list_saves skips invalid files with a warning. Only the top-level shape is checked (a party array of dictionaries); a hand-edited file with wrong field types could still error during load.
+- Blank names return false. UI should keep Save disabled until a name is entered. Saves within the same second have no guaranteed order.
+- Bug caught by reading the check output: list_saves logged an engine error when the folder did not exist yet, which would happen on every first launch. Now checks first.
+- Verified: import clean. Throwaway script, 31 checks, no failures: save/load round trip through real files, enums and slots, odd names, overwrite, newest-first order, corrupt files. Script refuses to run if user://saves exists and deletes what it creates. No real saves were touched.
+- Not checked: failure paths for a full disk or an unwritable folder.
+- Next suggested feature: main-menu-01.
+
 ## 2026-10-31 - data-01 follow-up: enums instead of strings (requested by user)
 - Added resources/game_enums.gd (GameEnums): ClassId, WeaponId, EnemyId, EnemySize, SkillEffect, TargetSide. One shared file so Classes and Weapons need not reference each other.
 - Classes.ALL, Weapons.ALL and Enemies.ALL are now keyed by these enums, and all fields that held id strings use them. Use e.g. Classes.ALL[GameEnums.ClassId.FIGHTER]. The earlier data-01 notes that show strings are out of date.

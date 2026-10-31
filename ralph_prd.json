@@ -109,7 +109,8 @@
       "load_game(path) reads JSON and calls GameState.from_dict(). autosave() saves to a fixed 'autosave' slot.",
       "Register as autoload."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. SaveManager registered as an autoload. save_game, autosave and load_game return bool, so UI can report failures. Named saves use save_<sanitized>.json; the autosave uses autosave.json and appears in list_saves as 'Autosave', so has_saves is true once one exists. Import clean; 31 throwaway checks pass. Known limit: only the top-level save shape is validated, so a hand-edited file with wrong field types could still error during load."
   },
   {
     "id": "main-menu-01",
