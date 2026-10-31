@@ -202,7 +202,8 @@
       "Camera2D follows the player with limits set to the map bounds.",
       "On ready, place the player at GameState.overworld_position if set; keep it updated while moving."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Begin and choosing a save now reach the overworld. Position (0, 0) means a new game and uses the PlayerStart marker; positions off the map are pulled inside. GameState is only written while there is movement input, so standing still cannot overwrite a position just loaded or reset. facing is not saved. There is no way out of this scene until escape-menu-01. Import clean; throwaway checks with real key events pass; screenshots reviewed. Real gamepad not tested."
   },
   {
     "id": "overworld-hud-01",

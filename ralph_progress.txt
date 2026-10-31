@@ -135,3 +135,15 @@
 - A roll skips every name showing, so a re-roll always changes the name and heroes never match on a default. The list therefore needs at least 4 names; the comment above it says so. The user's own list has 9.
 - This replaces the shuffle in the previous entry: opening the screen uses the same roll, one column at a time.
 - Verified: import clean, real game runs. Throwaway script in a real window, 68 checks, no failures, including 300 rounds of class changes in every column (name always changes, stays on the list, never repeats in the party).
+
+## 2026-10-31 - overworld-01 (Overworld map and player) - COMPLETE
+- world/overworld.tscn/.gd: 3000x3000 map made of 16 labeled PlaceholderBox ground areas (GRASS, FOREST), 5 obstacles (2 rocks, lake, trees, ruins) and walls on all four map edges. Everything is laid out in the scene file so it can be moved in the editor. Ground has no gameplay effect yet; encounters-01 adds zones.
+- characters/heroes/overworld_player.tscn/.gd: class OverworldPlayer, a CharacterBody2D with a 48x64 box, 300 px/s speed (export), any-angle movement. Analog input controls speed, and diagonals with keys are no faster than straight lines. facing keeps the last direction, starts DOWN, and is not saved. Camera2D is a child, with limits set by the overworld.
+- Starting position: GameState.overworld_position (0, 0) means a new game and uses the PlayerStart marker, since the player can never stand on that corner. Positions off the map from an old or edited save are pulled inside. A saved position that ends up inside an obstacle is not handled.
+- Found by the checks: writing GameState every tick let a standing player overwrite a position just loaded or reset, while the old scene waited on the fade. It is now written only while there is movement input.
+- Godot's floating motion mode keeps nearly full speed when sliding along a wall at a shallow angle, and stops dead when pushing within 15 degrees of head-on. Left at Godot's defaults.
+- Begin and Load Game now reach this scene instead of logging "scene file not found". There is no way out of the overworld until escape-menu-01 except closing the window.
+- Removed .gitkeep from world/ and characters/heroes/. components/movement/ stays empty: movement lives in the player script for now because nothing else moves.
+- Verified: import clean, real game runs. Throwaway script in a real window, 39 checks, no failures: Begin and a real save file's Load row both arrive, real D/S/A key events, analog angle and half speed, simulated stick and deadzone, top-left and bottom-right walls and camera limits, rock blocking and sliding, off-map position, reset. Screenshots reviewed; they caught the HERO label wrapping, now fixed with a smaller font.
+- Not verified: a real gamepad, window sizes other than 1920x1080, smoothness on monitors above 60 Hz (the player moves on 60 Hz physics ticks with no interpolation).
+- Next suggested feature: overworld-hud-01.
