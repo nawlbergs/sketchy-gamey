@@ -295,7 +295,8 @@
       "On encounter: save overworld_position, store chosen enemy group in GameState.pending_encounter, go to combat.",
       "After combat, overworld restores the player position. Add a short no-encounter grace period after returning."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Enemy groups live in EncounterTables.ALL, picked by an enum exported on each zone, rather than as raw numbers in the scene. Grass 10% and Forest 25% per roll, a roll every 200 pixels walked, and no rolls for the first 600 pixels after the overworld opens. The two ground boxes around the start are now labeled SAFE. Until combat-layout-01 adds the combat scene, an encounter logs 'scene file not found' once and there are no more rolls that visit. combat-loop-01 must clear GameState.pending_encounter. Import clean; throwaway checks pass, including a real trip to a temporary combat scene and back."
   },
   {
     "id": "combat-layout-01",

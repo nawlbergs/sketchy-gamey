@@ -5,6 +5,16 @@
 [ext_resource type="PackedScene" path="res://characters/heroes/overworld_player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://ui/hud/overworld_hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" path="res://characters/npcs/npc.tscn" id="5_npc"]
+[ext_resource type="PackedScene" path="res://systems/encounter/encounter_zone.tscn" id="6_zone"]
+
+[sub_resource type="RectangleShape2D" id="zone_wide"]
+size = Vector2(1500, 750)
+
+[sub_resource type="RectangleShape2D" id="zone_square"]
+size = Vector2(750, 750)
+
+[sub_resource type="RectangleShape2D" id="zone_long"]
+size = Vector2(3000, 750)
 
 [sub_resource type="WorldBoundaryShape2D" id="edge_top"]
 normal = Vector2(0, 1)
@@ -69,19 +79,19 @@ offset_right = 750.0
 offset_bottom = 1500.0
 label_text = "GRASS"
 
-[node name="Grass4" parent="Ground" instance=ExtResource("2_box")]
+[node name="Safe1" parent="Ground" instance=ExtResource("2_box")]
 offset_left = 750.0
 offset_top = 750.0
 offset_right = 1500.0
 offset_bottom = 1500.0
-label_text = "GRASS"
+label_text = "SAFE"
 
-[node name="Grass5" parent="Ground" instance=ExtResource("2_box")]
+[node name="Safe2" parent="Ground" instance=ExtResource("2_box")]
 offset_left = 1500.0
 offset_top = 750.0
 offset_right = 2250.0
 offset_bottom = 1500.0
-label_text = "GRASS"
+label_text = "SAFE"
 
 [node name="Forest3" parent="Ground" instance=ExtResource("2_box")]
 offset_left = 2250.0
@@ -143,6 +153,45 @@ offset_top = 2250.0
 offset_right = 3000.0
 offset_bottom = 3000.0
 label_text = "GRASS"
+
+[node name="EncounterZones" type="Node2D" parent="."]
+
+[node name="GrassZone" parent="EncounterZones" instance=ExtResource("6_zone")]
+zone_name = "Grass"
+encounter_rate = 0.1
+
+[node name="NorthWest" type="CollisionShape2D" parent="EncounterZones/GrassZone"]
+position = Vector2(750, 375)
+shape = SubResource("zone_wide")
+
+[node name="West" type="CollisionShape2D" parent="EncounterZones/GrassZone"]
+position = Vector2(375, 1125)
+shape = SubResource("zone_square")
+
+[node name="MiddleBand" type="CollisionShape2D" parent="EncounterZones/GrassZone"]
+position = Vector2(1500, 1875)
+shape = SubResource("zone_long")
+
+[node name="SouthEast" type="CollisionShape2D" parent="EncounterZones/GrassZone"]
+position = Vector2(2250, 2625)
+shape = SubResource("zone_wide")
+
+[node name="ForestZone" parent="EncounterZones" instance=ExtResource("6_zone")]
+zone_name = "Forest"
+encounter_rate = 0.25
+table = 1
+
+[node name="NorthEast" type="CollisionShape2D" parent="EncounterZones/ForestZone"]
+position = Vector2(2250, 375)
+shape = SubResource("zone_wide")
+
+[node name="East" type="CollisionShape2D" parent="EncounterZones/ForestZone"]
+position = Vector2(2625, 1125)
+shape = SubResource("zone_square")
+
+[node name="SouthWest" type="CollisionShape2D" parent="EncounterZones/ForestZone"]
+position = Vector2(750, 2625)
+shape = SubResource("zone_wide")
 
 [node name="MapEdges" type="StaticBody2D" parent="."]
 

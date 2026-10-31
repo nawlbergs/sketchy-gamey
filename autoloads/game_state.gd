@@ -11,6 +11,7 @@ var xp: int = 0
 var xp_to_next: int = STARTING_XP_TO_NEXT
 var overworld_position: Vector2 = Vector2.ZERO
 var inventory: Array = []  # Always INVENTORY_SIZE long; null marks an empty slot.
+var pending_encounter: Array = []  # GameEnums.EnemyId values for the next fight. Not saved.
 
 
 func _init() -> void:
@@ -25,6 +26,7 @@ func reset() -> void:
 	overworld_position = Vector2.ZERO
 	inventory = []
 	inventory.resize(INVENTORY_SIZE)
+	pending_encounter = []
 
 
 ## Builds a new hero from class data: full health, with the class's starting weapon in weapon slot

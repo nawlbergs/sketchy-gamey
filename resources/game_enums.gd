@@ -37,6 +37,8 @@ enum WeaponId { SWORD, STAFF, MACE }
 enum GearSlot { HEAD, BODY }
 enum GearId { LEATHER_CAP, LEATHER_ARMOR }
 enum EnemyId { MUCK_BALL }
+## Scenes store exported enums as numbers, so add new tables at the end to keep placed zones correct.
+enum EncounterTableId { GRASS, FOREST }
 enum EnemySize { SM, MD, LG, XL }
 enum SkillId {
 	# Fighter

@@ -186,3 +186,16 @@
 - Verified: import clean, real game runs. Throwaway script in a real window, 36 checks, no failures, using real key events: walking into the NPC, E, Space and Enter, opening press not skipping line one, closing press not reopening, movement stopping, key repeat, talking from all four sides, slight angle and off-center, back turned, too far, a rock, two NPCs, an NPC with no lines, the story API, 400 characters. Overworld (39), HUD (32), party (69) and doll (36) checks still pass. Screenshots reviewed.
 - Not verified: a real gamepad.
 - Next suggested feature: encounters-01.
+
+## 2026-10-31 - encounters-01 (Random encounters) - COMPLETE
+- systems/encounter/encounter_zone.tscn/.gd: Area2D exporting zone_name, encounter_rate and table. Its CollisionShape2D children set where it covers, so a zone can be any shape.
+- systems/encounter/encounter_tracker.gd: child of the overworld player. Rolls every 200 pixels walked (export), with no rolls for the first 600 pixels (export) each time the overworld opens, which is the grace period after a fight. It counts real movement from move_and_slide, so pushing a wall, standing still and open dialogue never roll.
+- Differs from the step: enemy groups live in resources/enemies/encounter_tables.gd (EncounterTables.ALL), and zones export a GameEnums.EncounterTableId. Writing groups directly in the scene would store raw enum numbers, against the "ids are enums" rule. The table enum itself is stored as a number in the scene, as all exported enums are, so new tables go at the end of the enum.
+- The map: Grass zone 10% per roll, Forest zone 25%. The 2 ground boxes around the start and the Villager are now labeled SAFE, with no zone. Rates are placeholders.
+- GameState.pending_encounter holds the EnemyId group. It is not saved, and reset and load clear it. combat-loop-01 must clear it after a fight.
+- The player can still walk during the 0.2 second fade into combat, and the position that gets restored is the one at the encounter.
+- Until combat-layout-01 adds systems/combat/combat.tscn, an encounter logs "scene file not found" once and that visit has no more rolls, so the game does not appear to do anything. This is expected for now.
+- Removed .gitkeep from systems/encounter/.
+- Verified: import clean, real game runs. Throwaway script in a real window: 41 checks without a combat scene, 44 with a temporary empty one (removed afterwards), no failures. Covers every ground box's label against its zone, safe area, standing still, pushing a wall, rate 0, rate 1 triggering at exactly 600 pixels, dialogue, group from the right table, position restored after a real trip and back, grace after returning. Overworld, dialogue, HUD, party and doll checks still pass.
+- Not verified: how often fights feel at the real 10% and 25% rates. Rolls were only run at rates 0 and 1 through the game, and nobody has played it.
+- Next suggested feature: combat-layout-01.
