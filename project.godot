@@ -14,6 +14,12 @@ config/name="sketch-gamey"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameState="*res://autoloads/game_state.gd"
+SceneRouter="*res://autoloads/scene_router.gd"
+AudioManager="*res://autoloads/audio_manager.gd"
+
 [display]
 
 window/size/viewport_width=1920

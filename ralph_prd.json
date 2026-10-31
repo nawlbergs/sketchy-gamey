@@ -65,7 +65,8 @@
       "AudioManager: `play_music(id)` and `play_sfx(id)` that play a file from assets/audio/music/ or assets/audio/sfx/ if it exists and silently do nothing otherwise.",
       "Register all three as autoloads in project.godot."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. GameState heroes are dictionaries built by GameState.make_hero(). SceneRouter fades 0.2s to black and reports unknown names or missing scene files with push_error; only the placeholder_box test scene has been switched to so far, because the five real scenes do not exist yet. AudioManager checks .ogg, .mp3, .wav in that order and always loops music. Import clean; 26 throwaway behaviour checks pass. Open: Godot reports 4 leaked instances at exit if audio is playing when the game quits (seen headless only); recheck when main-menu-01 adds music and Quit."
   },
   {
     "id": "data-01",

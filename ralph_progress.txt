@@ -20,3 +20,16 @@
 - godot_console works from Claude's shell in this terminal session, so later iterations can run the check themselves.
 - Next suggested feature: core-autoloads-01.
 
+## 2026-10-31 - core-autoloads-01 (Global singletons + components) - COMPLETE
+- components/health/health_component.gd: max_hp, hp, setup(), damage(), heal(), is_dead(), signals hp_changed/died. Damage to a dead unit is ignored and died fires once. heal() on a dead unit does revive it; combat-loop-01 should block that if revives are not wanted.
+- components/combat_stats/stats_component.gd: speed only for now.
+- autoloads/game_state.gd: party (Array[Dictionary], use make_hero() to build), gold, xp, xp_to_next, overworld_position, inventory (always 36 slots, null = empty), reset(), to_dict(), from_dict(). party is empty after reset(); party-create-01 fills it.
+- from_dict() converts JSON floats back to ints for GameState and hero fields. Numbers inside items (inventory and equipment) stay floats after a load; handle that once items have a real shape.
+- autoloads/scene_router.gd: go_to(scene_name), 0.2s fade to black, blocks the mouse and ignores further go_to calls while switching. Unknown names and missing scene files push_error and stay on the current scene. Runs while the tree is paused, but the new scene stays paused unless the caller unpauses first.
+- autoloads/audio_manager.gd: play_music(id), play_sfx(id). Looks for .ogg, .mp3, .wav under assets/audio/music or sfx. Missing id does nothing, and music already playing keeps playing. Same id does not restart. There is no stop_music() yet.
+- Registered GameState, SceneRouter and AudioManager in project.godot. SaveManager and GameState.pending_encounter come with save-01 and encounters-01.
+- Removed .gitkeep from autoloads/, components/health/, components/combat_stats/.
+- Verified: import clean. Throwaway script, 26 checks pass: reset, JSON round trip, health clamps and signals, router errors, fade and scene change (using placeholder_box.tscn, as the real scenes do not exist yet), audio with temporary imported WAVs (deleted afterwards) and with missing ids. Fade rendered in a real 1920x1080 window: all four corners black at full alpha.
+- Open: with audio playing at quit, a headless run reports 4 leaked instances and 2 resources in use (AudioStreamWAV and its playback). The test quit immediately after starting playback, and runs without audio show nothing. Not checked in a windowed run with real playback. Recheck when main-menu-01 adds music and Quit.
+- Next suggested feature: data-01.
+
