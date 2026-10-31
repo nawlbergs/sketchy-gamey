@@ -16,9 +16,10 @@
       "Add input actions: move_up/move_down/move_left/move_right (WASD + arrow keys + gamepad left stick), interact (E, Space, gamepad A), menu (Esc, gamepad Start), confirm (Enter, Space), cancel (Esc, Backspace).",
       "Write CLAUDE.md: Godot 4.7, typed GDScript. Keep every image a placeholder (see PlaceholderBox) sized/positioned where real art will go. Code style: (1) prefer composition over inheritance: build behaviour from small reusable component nodes/Resources (e.g. HealthComponent, StatsComponent, SkillSetComponent, InteractionComponent) attached as children, not deep class hierarchies; extend only Godot built-ins plus at most one thin project base class. (2) Structure files per the '# Folder Structure' section of project_plan.txt: copy that tree into CLAUDE.md, and keep a scene's script next to its .tscn with the same name.",
       "Add .claude_output.txt to .gitignore (ralph.sh temp file).",
-      "Verify: if godot_console is on PATH, run `godot_console --headless --path . --quit` and fix any errors it prints."
+      "Verify: if godot_console is on PATH, run `godot_console --headless --path . --import` and fix any errors it prints."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Folders + .gitkeep, _production_files/.gdignore, display + input map in project.godot, CLAUDE.md, .gitignore. Headless Godot check run by the user with Godot 4.7.2: no errors or warnings."
   },
   {
     "id": "ui-placeholder-01",
@@ -376,7 +377,7 @@
     ],
     "steps": [
       "Trace the flow in code: main menu -> new game -> party create -> overworld -> talk to NPC -> random encounter -> combat win -> overworld -> escape menu -> save -> exit -> main menu -> load game -> overworld.",
-      "If godot_console is on PATH, run `godot_console --headless --path . --quit` and fix all script/scene errors.",
+      "If godot_console is on PATH, run `godot_console --headless --path . --import` and fix all script/scene errors.",
       "Fix broken scene paths, missing autoload references and signal hookups. Record anything that needs a human to test by hand in ralph_progress.txt.",
       "Check code style: every file sits where the '# Folder Structure' section of project_plan.txt says, and no inheritance chains where a component would do."
     ],

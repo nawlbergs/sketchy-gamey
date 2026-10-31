@@ -1,0 +1,9 @@
+## 2026-10-31 - setup-01 (Project foundation) - COMPLETE
+- Created the full folder tree from project_plan.txt "# Folder Structure" (37 folders, each with .gitkeep). Added _production_files/.gdignore so Godot skips source art.
+- project.godot: 1920x1080 viewport, stretch mode canvas_items, aspect expand.
+- project.godot input map: move_up/down/left/right (WASD, arrows, left stick), interact (E, Space, pad A), menu (Esc, pad Start), confirm (Enter, Space, pad A), cancel (Esc, Backspace, pad B).
+- Wrote CLAUDE.md: placeholder rule, composition over inheritance, folder tree, SceneRouter navigation, slot numbering, out-of-scope tabs, how to run the headless check.
+- .gitignore: added .claude_output.txt.
+- Verified 2026-10-31: user ran `godot_console --headless --path . --import` (Godot 4.7.2 stable) in their terminal; no errors or warnings. No scripts or scenes exist yet, so this only shows the project opens and scans cleanly.
+- Next suggested feature: ui-placeholder-01 or core-autoloads-01 (both only depend on setup-01).
+

@@ -12,13 +12,15 @@ fi
 # Create a hidden temp file for result checking
 tmp_file=".claude_output.txt"
 
-#    5. We are working in ./src/app-react which is a react re-write of ./public/auth, ./public/portal, ./public/common
+# unbuffer (from 'expect') streams output live; Git Bash doesn't ship it, so fall back to plain claude
+UNBUFFER=""; command -v unbuffer >/dev/null 2>&1 && UNBUFFER="unbuffer"
+
 for ((i=1; i<=$1; i++)); do
   echo "Iteration $i"
   echo "-------------------------"
 
   # 'tee' pipes the output to the screen AND the file simultaneousyly
-  unbuffer claude --permission-mode acceptEdits -p "@ralph_prd.json @ralph_progress.txt
+  $UNBUFFER claude --permission-mode acceptEdits -p "@ralph_prd.json @ralph_progress.txt
     - Find the highest-priority feature to work on and work only on that feature. The features are not in order of priority.
     - Update the ralph_prd.json file with the work that was done.
     - Append your progress to the ralph_progress.txt file.

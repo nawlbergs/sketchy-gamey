@@ -27,3 +27,6 @@ editor_settings-*
 ehthumbs.db
 Thumbs.db
 Desktop.ini
+
+# ralph.sh temp output
+.claude_output.txt
