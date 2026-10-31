@@ -34,7 +34,7 @@ res://
 │   │   ├── music/
 │   │   └── sfx/
 │   └── fonts/
-├── autoloads/              global singletons (GameState, SceneRouter, AudioManager, SaveManager)
+├── autoloads/              global singletons (GameState, SceneRouter, AudioManager, SaveManager; DialogueBox is also an autoload, from ui/dialogue/)
 ├── characters/             scenes built from components
 │   ├── heroes/             overworld player, hero doll (rag doll shown wherever a hero appears in UI), hero combat units
 │   ├── enemies/            Muck Ball etc.

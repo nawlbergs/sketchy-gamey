@@ -21,6 +21,7 @@ GameState="*res://autoloads/game_state.gd"
 SceneRouter="*res://autoloads/scene_router.gd"
 AudioManager="*res://autoloads/audio_manager.gd"
 SaveManager="*res://autoloads/save_manager.gd"
+DialogueBox="*res://ui/dialogue/dialogue_box.tscn"
 
 [display]
 

@@ -271,7 +271,8 @@
       "DialogueBox on a CanvasLayer at the bottom of the screen: speaker name, text, '▼' prompt; confirm/interact advances, closes after last line. Player movement is disabled while it is open.",
       "Expose a simple `DialogueBox.show_lines(lines)` so story scripts can use it later."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. DialogueBox is an autoload scene, so anything can call show_lines(lines, speaker) and await finished. InteractionComponent sweeps a circle rather than a ray so free movement does not keep missing. One placeholder Villager stands near the start. The box covers most of the HUD while open. escape-menu-01 must not open while DialogueBox.is_open(). Import clean; throwaway checks with real key events pass; screenshots reviewed."
   },
   {
     "id": "encounters-01",
@@ -358,7 +359,7 @@
       "world/overworld.gd"
     ],
     "steps": [
-      "Opened by the 'menu' action or the HUD Menu button; pauses the tree (menu uses process_mode ALWAYS); Esc closes it.",
+      "Opened by the 'menu' action or the HUD Menu button, but not while DialogueBox.is_open(); pauses the tree (menu uses process_mode ALWAYS); Esc closes it.",
       "Tabs top-left: Inventory, Status, Quest. Status and Quest just show a 'Coming soon' label (out of scope).",
       "Top-right Save button opens a small save panel: LineEdit for save name + Save button calling SaveManager.save_game; show 'Saved'.",
       "Top-right Exit button calls SaveManager.autosave() then returns to the main menu (unpause first)."

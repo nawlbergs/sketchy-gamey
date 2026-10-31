@@ -8,10 +8,13 @@ extends CharacterBody2D
 var facing: Vector2 = Vector2.DOWN
 
 @onready var _camera: Camera2D = %Camera
+@onready var _interaction: InteractionComponent = %Interaction
 
 
 func _physics_process(_delta: float) -> void:
-	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var direction := Vector2.ZERO
+	if not DialogueBox.is_open():
+		direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if direction != Vector2.ZERO:
 		facing = direction.normalized()
 	velocity = direction * speed
@@ -19,6 +22,14 @@ func _physics_process(_delta: float) -> void:
 	# Only while moving, so a player standing still cannot overwrite a position just loaded or reset.
 	if direction != Vector2.ZERO:
 		GameState.overworld_position = global_position
+
+
+## The player gets input before DialogueBox, so while the box is open the press is left for it.
+func _unhandled_input(event: InputEvent) -> void:
+	if DialogueBox.is_open() or not event.is_action_pressed("interact"):
+		return
+	if _interaction.try_interact(facing):
+		get_viewport().set_input_as_handled()
 
 
 ## Stops the camera showing anything outside bounds.

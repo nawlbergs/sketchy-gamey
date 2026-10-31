@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://ui/common/placeholder_box.tscn" id="2_box"]
 [ext_resource type="PackedScene" path="res://characters/heroes/overworld_player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://ui/hud/overworld_hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://characters/npcs/npc.tscn" id="5_npc"]
 
 [sub_resource type="WorldBoundaryShape2D" id="edge_top"]
 normal = Vector2(0, 1)
@@ -223,6 +224,11 @@ label_text = "RUINS"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Obstacles/Ruins"]
 shape = SubResource("ruins")
+
+[node name="Villager" parent="." instance=ExtResource("5_npc")]
+position = Vector2(1500, 1400)
+speaker_name = "Villager"
+lines = Array[String](["Placeholder story text goes here.", "Press confirm or interact to read the next line.", "This is the last line, so the box closes after it."])
 
 [node name="PlayerStart" type="Marker2D" parent="."]
 unique_name_in_owner = true

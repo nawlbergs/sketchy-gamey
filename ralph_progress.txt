@@ -173,3 +173,16 @@
 - Earlier check script fix: since overworld-01, Begin really leaves the screen, so the party check's Back test had gone stale. It now tests Back on a fresh screen.
 - Verified: import clean, real game runs. Throwaway script in a real window, 36 checks with no art and 37 with a temporary real image for the cap (removed afterwards), no failures: both screens, fit at several sizes, gear combinations, taking gear off, save round trip, unknown names. Party (69), HUD (32) and overworld (39) checks all pass. Screenshots reviewed.
 - Next suggested feature: dialogue-01.
+
+## 2026-10-31 - dialogue-01 (Interaction and dialogue box) - COMPLETE
+- components/interaction/interactable_component.gd: child node marking its parent as interactable, with an interacted signal. interaction_component.gd: ShapeCast2D on the player that sweeps a 20-radius circle 40 pixels along facing and interacts with the nearest interactable it finds. A circle is used because a thin ray keeps missing with free movement.
+- characters/npcs/npc.tscn/.gd: exports speaker_name and lines. One placeholder "Villager" stands right of the start position.
+- ui/dialogue/dialogue_box.tscn/.gd: registered as the DialogueBox autoload, so any script can call DialogueBox.show_lines(lines, speaker) and await DialogueBox.finished. Confirm or interact advances, key repeat does not, and the box closes after the last line. Empty lines do nothing and do not emit finished.
+- The player does not move or turn while the box is open. A key still held when it closes takes effect straight away.
+- Known: the box sits over the HUD at the bottom of the screen, hiding gold and XP and most of the hero panels, whose tops show above it. The Menu button can still be clicked while it is open; escape-menu-01 must check DialogueBox.is_open(), now in its step. There is no on-screen hint that something can be interacted with. Text over about 400 characters makes the box grow upward.
+- The box's text appears all at once, with no typing effect. The plan's story animations are not built; the plan says the first draft can be conversation only.
+- systems/dialogue/ stays empty: nothing there is needed yet.
+- Removed .gitkeep from characters/npcs/, components/interaction/ and ui/dialogue/.
+- Verified: import clean, real game runs. Throwaway script in a real window, 36 checks, no failures, using real key events: walking into the NPC, E, Space and Enter, opening press not skipping line one, closing press not reopening, movement stopping, key repeat, talking from all four sides, slight angle and off-center, back turned, too far, a rock, two NPCs, an NPC with no lines, the story API, 400 characters. Overworld (39), HUD (32), party (69) and doll (36) checks still pass. Screenshots reviewed.
+- Not verified: a real gamepad.
+- Next suggested feature: encounters-01.
