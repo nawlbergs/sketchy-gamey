@@ -345,7 +345,8 @@
       "Enemy turn: Muck Ball attacks a random living hero (slightly favour front slots).",
       "Win: grant xp/gold to GameState, return to overworld. All heroes dead: simple 'Defeated' message then main menu."
     ],
-    "complete": false
+    "complete": true,
+    "notes": "Done 2026-10-31. Only skill 1 and x work; 2-4 and m are disabled. Added beyond the steps: living enemies step forward after a death, because Sword and Mace only reach slots 4-5 and a party without a Mage could otherwise never finish. Enemies gained xp and gold (10 and 3 for Muck Ball). Damage is saved to the hero as it happens. Nothing heals yet, and dead heroes stay at 0 after a win, so a party wears down until Defeated. XP does not level up and can pass xp_to_next. Mouse only. Import clean; throwaway checks pass; screenshots reviewed."
   },
   {
     "id": "escape-menu-01",

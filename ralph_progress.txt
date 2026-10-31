@@ -222,3 +222,16 @@
 - For combat-loop-01: only skill 1 (weapon skill) works, and buttons 2-4 and m may do nothing. Rest/Pass effects, skill charges and dodge are left out, and the stat list will change later. The hero's second bar stays empty; the user thinks it may be a resource.
 - My addition to the step: x ends the turn with no other effect, so a hero with no valid target can't get stuck. Removed the step's Move, Pass and skill-resolving parts to match.
 - Move and Rest hover text now says "Not working yet" instead of the sketch's old rules. Combat checks still pass (72).
+
+## 2026-10-31 - combat-loop-01 (Minimal turn loop) - COMPLETE
+- systems/combat/combat.gd now runs fights. Each round every living unit rolls speed + 0-4, highest first. The queue shows the current unit and those still to act this round, so it empties toward a round's end. The temporary End fight button is gone.
+- Hero turn: press 1 to arm the weapon skill, markers appear over valid targets, click one. Pressing 1 again or Esc cancels. x ends the turn with no other effect. 2, 3, 4, m and the T and I buttons are disabled. Clicking another hero still shows them, with actions off until the current hero is selected again.
+- Enemy turn: 0.8 second pause, then a random living hero is hit, weighted by slot, so slot 3 is three times as likely as slot 1. Enemies ignore their skill's target_slots here, so they can always reach someone.
+- Beyond the steps: living enemies step forward after a death. Sword and Mace only reach slots 4-5, so without this a party with no Mage could never finish 3 or more enemies. The user may want to rule on this.
+- Win: "Victory!" with rewards for 2 seconds, then the overworld at the position saved. Enemies gained xp and gold in Enemies.ALL (Muck Ball 10 and 3, placeholders). Defeat: "Defeated" for 2 seconds, then the main menu. Both clear pending_encounter.
+- Damage is written to the hero in GameState as it happens. Dead heroes fade, are skipped and stay at 0 HP.
+- Known gaps: nothing heals, since skill 1 is damage for every class, so a party wears down until Defeated. Dead heroes do not revive after a win. XP does not level up and can pass xp_to_next; the bar stays full and the text shows e.g. "XP 120 / 100". Mouse only, no keyboard or gamepad control of this screen. A defeat leaves the old GameState until New Game or a load, which replace it. No saving exists until escape-menu-01.
+- With no party (running the scene directly) the fight does not start, and a warning says so.
+- Verified: import clean, real game runs. New throwaway script in a real window, 60 checks, no failures, run 3 times, with simulated mouse clicks: order, buttons, viewing another hero, arm and cancel, damage, x, enemy turns, target weighting, four enemies beaten by three fighters, rewards and HUD after, dead heroes, defeat, a real walk into an encounter and back. A test failure along the way came from the script's warp_mouse moving the real cursor, not the game. Combat layout, encounter, overworld, dialogue, HUD, party and doll checks still pass. Screenshots reviewed.
+- Not verified: a person playing it, so game feel, difficulty and pacing are untested.
+- Next suggested feature: escape-menu-01.
